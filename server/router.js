@@ -3,10 +3,25 @@ const questRouter = require("./features/quest/questRouter");
 const adventurerRouter = require("./features/adventurer/adventurerRouter");
 const discordRouter = require("./features/discord/discordRouter");
 const searchRouter = require("./features/search/searchRouter");
+const responseHandler = require("./middleware/responseHandler");
 const router = Router();
 
-questRouter(router);
-adventurerRouter(router);
-discordRouter(router);
-searchRouter(router);
+const specialRouter = {};
+["get", "post", "put", "patch"].forEach((name) => {
+  specialRouter[name] = (route, callback) =>
+    router[name](route, (req, res) =>
+      responseHandler(
+        res,
+        callback.constructor.name === "AsyncFunction"
+          ? callback(req, res)
+          : new Promise((resolve) => resolve(callback(req, res)))
+      )
+    );
+});
+
+questRouter(specialRouter);
+adventurerRouter(specialRouter);
+discordRouter(specialRouter);
+searchRouter(specialRouter);
+
 module.exports = router;
