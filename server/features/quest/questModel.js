@@ -12,6 +12,7 @@ const questSchema = Schema({
   fullView: { type: [Strings] },
   rankPoints: { type: Number, default: 0 },
   isSecret: { type: Boolean, default: false },
+  length: { type: Number, default: null },
 });
 
 module.exports = new ModelTemplate(questSchema, COLLECTION_NAMES.QUEST);

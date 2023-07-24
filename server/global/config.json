@@ -2,6 +2,7 @@
   "COLLECTION_NAMES": {
     "ADVENTURER": "adventurer",
     "QUEST": "quest",
-    "SEARCH": "search"
+    "SEARCH": "search",
+    "COMPLETION": "completion"
   }
 }
