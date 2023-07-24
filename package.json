@@ -4,7 +4,7 @@
   "description": "Personal website for daily activities, progress tracking, and other personal tools.",
   "main": "server/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "nodemon server/app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/dhdenvo/MyQuestBoard/issues"
   },
-  "homepage": "https://github.com/dhdenvo/MyQuestBoard#readme"
+  "homepage": "https://github.com/dhdenvo/MyQuestBoard#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.1",
+    "nodemon": "^3.0.1",
+    "passport": "^0.6.0"
+  }
 }
