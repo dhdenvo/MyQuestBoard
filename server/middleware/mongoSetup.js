@@ -1,7 +1,7 @@
 const { connect } = require("mongoose");
 
-const connectionString = `mongodb://${process.env.MONGO_URL}?authSource=${process.env.MONGO_AUTH_SOURCE}`;
-connect(connectionString)
+const connectionString = `mongodb://${process.env.MONGO_URL}`;
+connect(connectionString, { dbName: process.env.MONGO_DB_NAME })
   .then(() => console.log("Connected to the database"))
   .catch(() => {
     console.log("Unable to connect to the database");

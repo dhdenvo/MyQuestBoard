@@ -16,4 +16,4 @@ const questSchema = Schema({
   completedOn: { type: Date, default: Date.now },
 });
 
-module.exports = new ModelTemplate(questSchema, COLLECTION_NAMES.QUEST);
+module.exports = new ModelTemplate(questSchema, COLLECTION_NAMES.COMPLETION);
