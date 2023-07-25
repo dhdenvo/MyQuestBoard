@@ -1,3 +1,9 @@
 const model = require("./adventurerModel");
 
-module.exports = {};
+const getAdventurers = () => model.findMany();
+const createAdventurer = ({ body }) => model.createOne(body);
+
+module.exports = {
+  getAdventurers,
+  createAdventurer,
+};
