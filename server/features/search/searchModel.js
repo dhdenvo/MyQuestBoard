@@ -2,7 +2,7 @@ const { Schema } = require("mongoose");
 const ModelTemplate = require("../shared/ModelTemplate");
 const { COLLECTION_NAMES } = require("../../global/config.json");
 
-const questSchema = Schema(
+const searchSchema = Schema(
   {
     title: { type: String, required: true },
     isSecret: { type: Boolean, default: false },
@@ -11,4 +11,4 @@ const questSchema = Schema(
   { versionKey: false }
 );
 
-module.exports = new ModelTemplate(questSchema, COLLECTION_NAMES.SEARCH);
+module.exports = new ModelTemplate(COLLECTION_NAMES.SEARCH, searchSchema);

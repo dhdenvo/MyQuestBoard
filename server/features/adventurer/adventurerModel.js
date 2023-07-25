@@ -13,6 +13,6 @@ const adventurerSchema = Schema(
 );
 
 module.exports = new ModelTemplate(
-  adventurerSchema,
-  COLLECTION_NAMES.ADVENTURER
+  COLLECTION_NAMES.ADVENTURER,
+  adventurerSchema
 );

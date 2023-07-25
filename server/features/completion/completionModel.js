@@ -19,4 +19,4 @@ const questSchema = Schema(
   { versionKey: false }
 );
 
-module.exports = new ModelTemplate(questSchema, COLLECTION_NAMES.COMPLETION);
+module.exports = new ModelTemplate(COLLECTION_NAMES.COMPLETION, questSchema);

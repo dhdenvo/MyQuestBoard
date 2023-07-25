@@ -16,7 +16,7 @@ app.use(
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(passport.initialize());
+app.use(passport.initialize({ userProperty: "adventurer" }));
 app.use(passport.session());
 
 require("./middleware/auth")(router);
