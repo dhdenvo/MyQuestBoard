@@ -1,2 +1,5 @@
 const controller = require("./questController");
-module.exports = (router) => {};
+
+module.exports = (router) => {
+  router.get("/quests", controller.getQuests);
+};
