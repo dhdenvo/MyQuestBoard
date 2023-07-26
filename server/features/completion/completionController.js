@@ -24,7 +24,7 @@ const getCompletionSummary = ({ adventurer, query }) => {
       },
     });
 
-  return model.aggregate(pipeline);
+  return model.aggregate(pipeline, !query.dateGrouping);
 };
 
 module.exports = {
