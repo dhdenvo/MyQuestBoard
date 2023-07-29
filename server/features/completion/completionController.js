@@ -2,11 +2,18 @@ const model = require("./completionModel");
 const alternateModels = require("../shared/helpers/alternateModels");
 const { FREQUENCY_TYPES } = require("../shared/configs/questConfig.json");
 
+// Specific functions that increase the due date by the frequencies
 const FREQUENCY_INCREASE_FUNCS = {
   [FREQUENCY_TYPES.DAILY]: require("date-fns").addDays,
   [FREQUENCY_TYPES.WEEKLY]: require("date-fns").addWeeks,
   [FREQUENCY_TYPES.MONTHLY]: require("date-fns").addMonths,
   [FREQUENCY_TYPES.YEARLY]: require("date-fns").addYears,
+};
+// Auto increase a date until it passes the current date
+const autoIncFunc = (func, date) => {
+  const newDate = freqIncFunc(date, 1);
+  if (newDate > new Date()) return newDate;
+  return autoIncFunc(func, newDate);
 };
 
 const completeQuest = async ({ adventurer, params }) => {
@@ -26,7 +33,7 @@ const completeQuest = async ({ adventurer, params }) => {
     proms.push(
       alternateModels.QUEST.updateOne(
         { _id: quest._id },
-        { $set: { dueDate: freqIncFunc(quest.dueDate, 1) } }
+        { $set: { dueDate: autoIncFunc(freqIncFunc, quest.dueDate) } }
       )
     );
 
