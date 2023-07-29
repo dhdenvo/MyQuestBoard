@@ -1,7 +1,9 @@
 const model = require("./questModel");
 const { COLLECTION_NAMES } = require("../../global/config.json");
 
+// Get all quests for an adventurer with their completion
 const getQuests = ({ adventurer }) => {
+  // Create the query for what counts as a valid completion for a quest
   const completionQuery = [
     { $eq: ["$quest", "$$id"] },
     { $eq: ["$adventurer", adventurer._id] },
@@ -36,6 +38,7 @@ const getQuests = ({ adventurer }) => {
   return model.aggregate(pipeline, false);
 };
 
+// A simple create quest function from a quest object
 const createQuest = (quest) => model.createOne(quest);
 
 module.exports = {

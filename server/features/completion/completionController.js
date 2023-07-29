@@ -16,6 +16,7 @@ const autoIncFunc = (func, date) => {
   return autoIncFunc(func, newDate);
 };
 
+// Create a completion for a given quest & increase the quest's due date
 const completeQuest = async ({ adventurer, params }) => {
   const quest = await alternateModels.QUEST.findOne(params.questId, true);
   if (!quest) throw "Quest is not listed on the quest board";
@@ -41,6 +42,7 @@ const completeQuest = async ({ adventurer, params }) => {
   return creationRes;
 };
 
+// Get an overall summary for a given adventurer & query
 const getCompletionSummary = ({ adventurer, query }) => {
   const match = { adventurer: adventurer._id };
   // If a specific quest is passed, only show completions for that quest
