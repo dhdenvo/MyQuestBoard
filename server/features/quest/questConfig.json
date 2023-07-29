@@ -1,0 +1,8 @@
+{
+  "FREQUENCY_TYPES": {
+    "DAILY": "daily",
+    "WEEKLY": "weekly",
+    "MONTHLY": "monthly",
+    "YEARLY": "yearly"
+  }
+}

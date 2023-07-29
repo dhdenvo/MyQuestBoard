@@ -1,6 +1,7 @@
 const { Schema } = require("mongoose");
 const ModelTemplate = require("../shared/ModelTemplate");
 const { COLLECTION_NAMES } = require("../../global/config.json");
+const { FREQUENCY_TYPES } = require("./questConfig.json");
 
 const questSchema = Schema(
   {
@@ -13,7 +14,14 @@ const questSchema = Schema(
     fullView: { type: [String] },
     rankPoints: { type: Number, default: 0 },
     isSecret: { type: Boolean, default: false },
-    length: { type: Number, default: null },
+    frequency: {
+      type: String,
+      default: FREQUENCY_TYPES.DAILY,
+      enum: Object.values(FREQUENCY_TYPES),
+    },
+    frequencyDecider: { type: Schema.Types.Mixed },
+    reminderFrequency: { type: Number, default: 0 },
+    timeLimit: { type: Number, default: 0 },
   },
   { versionKey: false }
 );
