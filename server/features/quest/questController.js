@@ -36,6 +36,9 @@ const getQuests = ({ adventurer }) => {
   return model.aggregate(pipeline, false);
 };
 
+const createQuest = (quest) => model.createOne(quest);
+
 module.exports = {
   getQuests,
+  createQuest,
 };
