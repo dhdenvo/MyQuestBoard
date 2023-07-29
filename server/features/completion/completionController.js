@@ -1,13 +1,37 @@
 const model = require("./completionModel");
 const alternateModels = require("../shared/helpers/alternateModels");
+const { FREQUENCY_TYPES } = require("../shared/configs/questConfig.json");
+
+const FREQUENCY_INCREASE_FUNCS = {
+  [FREQUENCY_TYPES.DAILY]: require("date-fns").addDays,
+  [FREQUENCY_TYPES.WEEKLY]: require("date-fns").addWeeks,
+  [FREQUENCY_TYPES.MONTHLY]: require("date-fns").addMonths,
+  [FREQUENCY_TYPES.YEARLY]: require("date-fns").addYears,
+};
 
 const completeQuest = async ({ adventurer, params }) => {
   const quest = await alternateModels.QUEST.findOne(params.questId, true);
   if (!quest) throw "Quest is not listed on the quest board";
-  return await model.createOne({
+  // Create the new completion of the quest
+  const creationProm = model.createOne({
     adventurer: adventurer._id,
     quest: quest._id,
   });
+  const proms = [creationProm];
+
+  // Get the increase function for the due date
+  const freqIncFunc = FREQUENCY_INCREASE_FUNCS[quest.frequency];
+  // If there is an increase function, update the quest with the new due date
+  if (freqIncFunc)
+    proms.push(
+      alternateModels.QUEST.updateOne(
+        { _id: quest._id },
+        { $set: { dueDate: freqIncFunc(quest.dueDate, 1) } }
+      )
+    );
+
+  const [creationRes] = await Promise.all(proms);
+  return creationRes;
 };
 
 const getCompletionSummary = ({ adventurer, query }) => {
