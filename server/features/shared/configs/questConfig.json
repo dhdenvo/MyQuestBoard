@@ -3,6 +3,7 @@
     "DAILY": "daily",
     "WEEKLY": "weekly",
     "MONTHLY": "monthly",
-    "YEARLY": "yearly"
+    "YEARLY": "yearly",
+    "ONCE": "once"
   }
 }

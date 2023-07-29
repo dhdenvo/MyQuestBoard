@@ -1,13 +1,22 @@
 const model = require("./questModel");
 const { COLLECTION_NAMES } = require("../../global/config.json");
-const { getDayOfYear, getYear } = require("date-fns");
 
 const getQuests = ({ adventurer }) => {
   const completionQuery = [
     { $eq: ["$quest", "$$id"] },
     { $eq: ["$adventurer", adventurer._id] },
-    { $eq: [{ $year: "$completedOn" }, getYear(new Date())] },
-    { $eq: [{ $dayOfYear: "$completedOn" }, getDayOfYear(new Date())] },
+    {
+      $lt: [
+        "$completedOn",
+        {
+          $dateSubtract: {
+            startDate: "$$dueDate",
+            unit: "day",
+            amount: "$validUntil",
+          },
+        },
+      ],
+    },
   ];
   const pipeline = [
     // Get all of an adventurer's quests
@@ -16,7 +25,7 @@ const getQuests = ({ adventurer }) => {
     {
       $lookup: {
         from: COLLECTION_NAMES.COMPLETION,
-        let: { id: "$_id" },
+        let: { id: "$_id", dueDate: "$dueDate" },
         pipeline: [{ $match: { $expr: { $and: completionQuery } } }],
         as: "isComplete",
       },

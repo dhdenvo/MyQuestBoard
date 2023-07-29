@@ -1,7 +1,7 @@
 const { Schema } = require("mongoose");
 const ModelTemplate = require("../shared/ModelTemplate");
 const { COLLECTION_NAMES } = require("../../global/config.json");
-const { FREQUENCY_TYPES } = require("./questConfig.json");
+const { FREQUENCY_TYPES } = require("../shared/configs/questConfig.json");
 
 const questSchema = Schema(
   {
@@ -19,9 +19,22 @@ const questSchema = Schema(
       default: FREQUENCY_TYPES.DAILY,
       enum: Object.values(FREQUENCY_TYPES),
     },
-    frequencyDecider: { type: Schema.Types.Mixed },
-    reminderFrequency: { type: Number, default: 0 },
-    timeLimit: { type: Number, default: 0 },
+    dueDate: { type: Date, required: true },
+    validUntil: {
+      type: Number,
+      default: function () {
+        const DEFAULTS = {
+          [FREQUENCY_TYPES.DAILY]: 0,
+          [FREQUENCY_TYPES.WEEKLY]: 3,
+          [FREQUENCY_TYPES.MONTHLY]: 10,
+          [FREQUENCY_TYPES.YEARLY]: 30,
+          [FREQUENCY_TYPES.ONCE]: -10,
+        };
+        return DEFAULTS[this.frequency];
+      },
+    },
+    reminderFrequency: { type: [Number], default: [] },
+    leniency: { type: Number, default: 0 },
   },
   { versionKey: false }
 );
