@@ -6,13 +6,13 @@ const getQuests = ({ adventurer }) => {
     { $eq: ["$quest", "$$id"] },
     { $eq: ["$adventurer", adventurer._id] },
     {
-      $lt: [
+      $gt: [
         "$completedOn",
         {
           $dateSubtract: {
             startDate: "$$dueDate",
             unit: "day",
-            amount: "$validUntil",
+            amount: "$$validUntil",
           },
         },
       ],
@@ -25,7 +25,7 @@ const getQuests = ({ adventurer }) => {
     {
       $lookup: {
         from: COLLECTION_NAMES.COMPLETION,
-        let: { id: "$_id", dueDate: "$dueDate" },
+        let: { id: "$_id", dueDate: "$dueDate", validUntil: "$validUntil" },
         pipeline: [{ $match: { $expr: { $and: completionQuery } } }],
         as: "isComplete",
       },
