@@ -6,7 +6,7 @@ const getQuests = ({ adventurer }) => {
     { $eq: ["$quest", "$$id"] },
     { $eq: ["$adventurer", adventurer._id] },
     {
-      $gt: [
+      $lt: [
         "$completedOn",
         {
           $dateSubtract: {

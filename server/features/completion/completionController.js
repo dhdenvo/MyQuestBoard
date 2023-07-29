@@ -11,7 +11,7 @@ const FREQUENCY_INCREASE_FUNCS = {
 };
 // Auto increase a date until it passes the current date
 const autoIncFunc = (func, date) => {
-  const newDate = freqIncFunc(date, 1);
+  const newDate = func(date, 1);
   if (newDate > new Date()) return newDate;
   return autoIncFunc(func, newDate);
 };
