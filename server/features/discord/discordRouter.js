@@ -1,1 +1,5 @@
-module.exports = (router) => {};
+const controller = require("./discordController");
+
+module.exports = (router) => {
+  router.post("/discord", controller.sendMessage);
+};
