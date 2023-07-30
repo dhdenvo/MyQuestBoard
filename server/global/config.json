@@ -3,6 +3,8 @@
     "ADVENTURER": "adventurer",
     "QUEST": "quest",
     "SEARCH": "search",
-    "COMPLETION": "completion"
+    "COMPLETION": "completion",
+    "BOOK": "book",
+    "PAGE": "page"
   }
 }
