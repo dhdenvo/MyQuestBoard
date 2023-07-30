@@ -5,6 +5,7 @@ const { COLLECTION_NAMES } = require("../../global/config.json");
 const pageSchema = Schema(
   {
     pageNum: { type: String, required: true },
+    pageTitle: String,
     book: {
       type: Schema.Types.ObjectId,
       ref: COLLECTION_NAMES.BOOK,

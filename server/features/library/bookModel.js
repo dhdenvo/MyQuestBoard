@@ -8,10 +8,10 @@ const bookSchema = Schema(
     firstPage: {
       type: Schema.Types.ObjectId,
       ref: COLLECTION_NAMES.PAGE,
-      required: true,
+      default: null,
     },
     description: { type: String, default: "" },
-    originalLink: { type: String, default: "" },
+    originalSource: { type: String, default: "" },
   },
   { versionKey: false }
 );
