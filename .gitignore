@@ -2,3 +2,4 @@ node_modules
 client/build
 package-lock.json
 .env
+server/scripts/*
