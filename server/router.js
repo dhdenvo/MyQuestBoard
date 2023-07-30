@@ -4,6 +4,7 @@ const adventurerRouter = require("./features/adventurer/adventurerRouter");
 const discordRouter = require("./features/discord/discordRouter");
 const searchRouter = require("./features/search/searchRouter");
 const responseHandler = require("./middleware/responseHandler");
+const libraryRouter = require("./features/library/libraryRouter");
 const completionRouter = require("./features/completion/completionRouter");
 const router = Router();
 
@@ -25,5 +26,6 @@ adventurerRouter(specialRouter);
 discordRouter(specialRouter);
 searchRouter(specialRouter);
 completionRouter(specialRouter);
+libraryRouter(specialRouter);
 
 module.exports = router;
