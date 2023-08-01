@@ -21,6 +21,7 @@ app.use(passport.session());
 
 require("./middleware/auth")(router);
 app.use("/api", router);
+require("./jobs/cronHandler");
 
 app.listen(process.env.PORT, (err) => {
   if (err) console.error("Unable to start server:", err);

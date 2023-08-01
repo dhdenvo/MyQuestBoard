@@ -17,6 +17,7 @@ class ModelTemplate {
     useId ? this.dbModel.findById(query) : this.dbModel.findOne(query);
   findMany = (query = {}) => this.dbModel.find(query);
   createOne = (doc) => this.dbModel.create(doc);
+  createMany = (docs) => this.dbModel.insertMany(docs);
   updateOne = (query, updateDoc) => this.dbModel.updateOne(query, updateDoc);
 
   aggregate = (pipeline = [], autoPopulate = true) => {

@@ -2,7 +2,7 @@ const { Schema } = require("mongoose");
 const ModelTemplate = require("../shared/ModelTemplate");
 const { COLLECTION_NAMES } = require("../../global/config.json");
 
-const questSchema = Schema(
+const completionSchema = Schema(
   {
     adventurer: {
       type: Schema.Types.ObjectId,
@@ -15,8 +15,12 @@ const questSchema = Schema(
       required: true,
     },
     completedOn: { type: Date, default: Date.now },
+    isFailure: { type: Boolean, default: false },
   },
   { versionKey: false }
 );
 
-module.exports = new ModelTemplate(COLLECTION_NAMES.COMPLETION, questSchema);
+module.exports = new ModelTemplate(
+  COLLECTION_NAMES.COMPLETION,
+  completionSchema
+);
