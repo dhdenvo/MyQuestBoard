@@ -1,26 +1,6 @@
 const model = require("./completionModel");
 const alternateModels = require("../shared/helpers/alternateModels");
-const { FREQUENCY_TYPES } = require("../shared/configs/questConfig.json");
-
-// Auto increase a date until it passes the current date
-const autoIncFunc = (func, date) => {
-  const newDate = func(date, 1);
-  if (newDate > new Date()) return newDate;
-  return autoIncFunc(func, newDate);
-};
-// Specific changes to a quest when the quest is completed
-const questCompletionChanges = ({ frequency, dueDate }) => {
-  const changes = {
-    [FREQUENCY_TYPES.DAILY]: { dueDate: require("date-fns").addDays },
-    [FREQUENCY_TYPES.WEEKLY]: { dueDate: require("date-fns").addWeeks },
-    [FREQUENCY_TYPES.MONTHLY]: { dueDate: require("date-fns").addMonths },
-    [FREQUENCY_TYPES.YEARLY]: { dueDate: require("date-fns").addYears },
-    [FREQUENCY_TYPES.ONCE]: { isComplete: true },
-  };
-  const change = changes[frequency];
-  if (change?.dueDate) change.dueDate = autoIncFunc(change.dueDate, dueDate);
-  return change;
-};
+const extendQuest = require("../shared/helpers/questExtensionHelper");
 
 // Create a completion for a given quest & increase the quest's due date
 const completeQuest = async ({ adventurer, params }) => {
@@ -35,21 +15,14 @@ const completeQuest = async ({ adventurer, params }) => {
   const proms = [creationProm];
 
   // Increase the adventurer's rank points by rank points from quest
-  await alternateModels.ADVENTURER.updateOne(
-    { _id: adventurer },
-    { $inc: { rankPoints: quest.rankPoints } }
+  proms.push(
+    alternateModels.ADVENTURER.updateOne(
+      { _id: adventurer },
+      { $inc: { rankPoints: quest.rankPoints } }
+    )
   );
-
-  // Get the increase function for the due date
-  const questChanges = questCompletionChanges(quest);
-  // If there is an increase function, update the quest with the new due date
-  if (questChanges)
-    proms.push(
-      alternateModels.QUEST.updateOne(
-        { _id: quest._id },
-        { $set: questChanges }
-      )
-    );
+  // Extend the quest if it is set to be extended
+  proms.push(extendQuest(quest));
 
   const [creationRes] = await Promise.all(proms);
   return creationRes;

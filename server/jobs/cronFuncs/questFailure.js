@@ -1,4 +1,5 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
+const extendQuest = require("../../features/shared/helpers/questExtensionHelper");
 
 module.exports = async () => {
   // Get all quests that have been failed
@@ -45,4 +46,6 @@ module.exports = async () => {
     )
   );
   await Promise.all(adventurerProms);
+  // For every quest failed, extend the due date
+  await Promise.all(failedQuests.map((quest) => extendQuest(quest, false)));
 };
