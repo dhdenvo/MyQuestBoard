@@ -24,6 +24,7 @@ const completeQuest = async ({ adventurer, params }) => {
   const creationProm = model.createOne({
     adventurer: adventurer._id,
     quest: quest._id,
+    rankPoints: quest.rankPoints,
   });
   const proms = [creationProm];
 

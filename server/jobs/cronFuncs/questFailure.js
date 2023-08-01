@@ -16,12 +16,14 @@ module.exports = async () => {
       ],
     },
   });
+  if (!failedQuests.length) return;
 
   // Create a completion for every quest failed
   await alternateModels.COMPLETION.createMany(
     failedQuests.map((quest) => ({
-      quest: quest._id,
       adventurer: quest.adventurer,
+      quest: quest._id,
+      rankPoints: quest.rankPoints,
       isFailure: true,
     }))
   );
@@ -31,16 +33,15 @@ module.exports = async () => {
     failedQuests.reduce(
       (obj, quest) => ({
         ...obj,
-        [quest.adventurer]: [...(obj[quest.adventurer] || []), quest],
+        [quest.adventurer]: (obj[quest.adventurer] || 0) + quest.rankPoints,
       }),
       {}
     )
-  ).map(([adventurer, quests]) => {
-    const lostAmount = quests.reduce((s, { rankPoints }) => s + rankPoints, 0);
-    return alternateModels.ADVENTURER.updateOne(
+  ).map(([adventurer, lostAmount]) =>
+    alternateModels.ADVENTURER.updateOne(
       { _id: adventurer },
       { $inc: { rankPoints: -lostAmount } }
-    );
-  });
+    )
+  );
   await Promise.all(adventurerProms);
 };

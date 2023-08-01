@@ -15,6 +15,7 @@ const completionSchema = Schema(
       required: true,
     },
     completedOn: { type: Date, default: Date.now },
+    rankPoints: { type: Number, required: true },
     isFailure: { type: Boolean, default: false },
   },
   { versionKey: false }
