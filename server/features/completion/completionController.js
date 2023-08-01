@@ -28,6 +28,12 @@ const completeQuest = async ({ adventurer, params }) => {
   });
   const proms = [creationProm];
 
+  // Increase the adventurer's rank points by rank points from quest
+  await alternateModels.ADVENTURER.updateOne(
+    { _id: adventurer },
+    { $inc: { rankPoints: quest.rankPoints } }
+  );
+
   // Get the increase function for the due date
   const freqIncFunc = FREQUENCY_INCREASE_FUNCS[quest.frequency];
   // If there is an increase function, update the quest with the new due date
