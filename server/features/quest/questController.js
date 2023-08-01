@@ -22,7 +22,7 @@ const getQuests = ({ adventurer }) => {
   ];
   const pipeline = [
     // Get all of an adventurer's quests
-    { $match: { adventurer: adventurer._id } },
+    { $match: { adventurer: adventurer._id, isComplete: false } },
     // Get the player's completion for a given quest for a current day
     {
       $lookup: {

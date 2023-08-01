@@ -35,6 +35,7 @@ const questSchema = Schema(
     },
     reminderFrequency: { type: [Number], default: [] },
     leniency: { type: Number, default: 0 },
+    isComplete: { type: Boolean, default: false },
   },
   { versionKey: false }
 );

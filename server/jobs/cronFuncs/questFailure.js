@@ -3,6 +3,7 @@ const alternateModels = require("../../features/shared/helpers/alternateModels")
 module.exports = async () => {
   // Get all quests that have been failed
   const failedQuests = await alternateModels.QUEST.findMany({
+    isComplete: false,
     $expr: {
       $lte: [
         {
