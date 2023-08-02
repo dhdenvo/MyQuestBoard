@@ -33,7 +33,10 @@ const questSchema = Schema(
         return DEFAULTS[this.frequency];
       },
     },
-    reminderFrequency: { type: [Number], default: [] },
+    reminderFrequency: {
+      type: [{ dayDiff: Number, time: String }],
+      default: [],
+    },
     leniency: { type: Number, default: 0 },
     isComplete: { type: Boolean, default: false },
   },
