@@ -8,6 +8,7 @@
     "PAGE": "page"
   },
   "GLOBAL_CONNECTIONS": {
-    "DISCORD": "discord"
+    "DISCORD": "discord",
+    "OPENAI": "openAI"
   }
 }

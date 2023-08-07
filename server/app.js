@@ -2,6 +2,7 @@ require("dotenv").config();
 
 require("./middleware/mongoSetup");
 require("./middleware/discordSetup");
+require("./middleware/openAISetup");
 
 const express = require("express");
 const app = express();
