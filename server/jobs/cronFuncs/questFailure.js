@@ -41,7 +41,7 @@ module.exports = async () => {
     )
   ).map(([adventurer, lostAmount]) =>
     alternateModels.ADVENTURER.updateOne(
-      { _id: adventurer },
+      { _id: adventurer, rankPoints: { $gt: 0 } },
       { $inc: { rankPoints: -lostAmount } }
     )
   );
