@@ -18,7 +18,13 @@ const questCompletionChanges = ({ frequency, dueDate }, isFailure) => {
       ? { dueDate: require("date-fns").addWeeks }
       : { isComplete: true },
   };
-  const change = changes[frequency];
+  let change = changes[frequency];
+  // If the frequency is a number, increase by that number of days
+  if (!change && !isNaN(parseInt(frequency)))
+    change = {
+      dueDate: (date) => require("date-fns").addDays(date, parseInt(frequency)),
+    };
+  // If increasing the due date, ensure the new due date is after now
   if (change?.dueDate) change.dueDate = autoIncFunc(change.dueDate, dueDate);
   return change;
 };
