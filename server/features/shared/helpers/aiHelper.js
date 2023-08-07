@@ -1,10 +1,17 @@
 const { openAIConn } = require("../../../global/globalConnections");
 
-const generateSingleResponse = async (message) => {
+const generateSingleResponse = async (message, systemContext) => {
   const openai = openAIConn();
+  const messages = [];
+  if (systemContext)
+    messages.push({
+      role: "system",
+      content: systemContext,
+    });
+  messages.push({ role: "user", content: message });
   const chatCompletion = await openai.createChatCompletion({
     model: process.env.OPENAI_MODEL,
-    messages: [{ role: "user", content: message }],
+    messages,
   });
   return chatCompletion.data.choices[0].message;
 };

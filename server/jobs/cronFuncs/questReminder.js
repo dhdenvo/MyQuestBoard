@@ -13,8 +13,11 @@ const sendReminder = async (quest) => {
     quest.dueDate
   )} and it is currently ${formatDate(
     new Date()
-  )}. Make the message approximately 2 sentences.`;
-  const message = await generateSingleResponse(generationMessage);
+  )}. Make the message approximately 2 sentences and try to include emojis.`;
+  const message = await generateSingleResponse(
+    generationMessage,
+    quest.adventurer.aiContext
+  );
 
   // Send discord message of quest to complete
   return await sendMessage(quest.adventurer, message);

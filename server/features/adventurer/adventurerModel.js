@@ -8,6 +8,7 @@ const adventurerSchema = Schema(
     rankPoints: { type: Number, default: 0 },
     rank: String,
     discordId: String,
+    aiContext: String,
   },
   { versionKey: false }
 );
