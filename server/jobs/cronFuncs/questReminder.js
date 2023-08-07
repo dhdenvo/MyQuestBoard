@@ -1,14 +1,23 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
 const { format } = require("date-fns");
 const { sendMessage } = require("../../features/discord/discordModel");
+const {
+  generateSingleResponse,
+} = require("../../features/shared/helpers/aiHelper");
 
-const sendReminder = (quest) => {
-  const message =
-    `Hey, just a heads up - remember to do the quest "[${quest.title}](${process.env.GUILD_ADDRESS})"` +
-    `. Its due on ${quest.dueDate}, so make sure to do it`;
+const sendReminder = async (quest) => {
+  const formatDate = (date) => format(date, "MMM d, yyy");
+  const generationMessage = `Generating a message reminding me on "${
+    quest.title
+  }". It is about ${quest.description}. This is due on ${formatDate(
+    quest.dueDate
+  )} and it is currently ${formatDate(
+    new Date()
+  )}. Make the message approximately 2 sentences.`;
+  const message = await generateSingleResponse(generationMessage);
 
   // Send discord message of quest to complete
-  return sendMessage(quest.adventurer, message);
+  return await sendMessage(quest.adventurer, message);
 };
 
 module.exports = async () => {

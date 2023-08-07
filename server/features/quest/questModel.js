@@ -11,6 +11,7 @@ const questSchema = Schema(
       required: true,
     },
     title: { type: String, required: true },
+    description: { type: String, required: true },
     fullView: { type: [String] },
     rankPoints: { type: Number, default: 0 },
     isSecret: { type: Boolean, default: false },
