@@ -7,18 +7,6 @@ const getQuests = ({ adventurer }) => {
   const completionQuery = [
     { $eq: ["$quest", "$$id"] },
     { $eq: ["$adventurer", adventurer._id] },
-    {
-      $lt: [
-        "$completedOn",
-        {
-          $dateSubtract: {
-            startDate: "$$dueDate",
-            unit: "day",
-            amount: "$$validUntil",
-          },
-        },
-      ],
-    },
   ];
   const pipeline = [
     // Get all of an adventurer's quests
@@ -28,12 +16,56 @@ const getQuests = ({ adventurer }) => {
       $lookup: {
         from: COLLECTION_NAMES.COMPLETION,
         let: { id: "$_id", dueDate: "$dueDate", validUntil: "$validUntil" },
-        pipeline: [{ $match: { $expr: { $and: completionQuery } } }],
+        pipeline: [
+          { $match: { $expr: { $and: completionQuery } } },
+          { $sort: { completedOn: -1 } },
+        ],
         as: "isComplete",
       },
     },
     // Convert the completion into a boolean if completed or not
-    { $addFields: { isComplete: { $ne: ["$isComplete", []] } } },
+    {
+      $addFields: {
+        isComplete: {
+          $and: [
+            // Ensure there is at least one completion
+            { $ne: ["$isComplete", []] },
+            // Ensure the last completion is a pass
+            {
+              $eq: [
+                {
+                  $getField: {
+                    field: "isFailure",
+                    input: { $first: "$isComplete" },
+                  },
+                },
+                false,
+              ],
+            },
+            // Use the due date as a way to figure out if the quest has been completed
+            {
+              $lt: [
+                // Get the current date (ignore time)
+                { $dateToString: { date: new Date(), format: "%G-%m-%d" } },
+                {
+                  $dateToString: {
+                    date: {
+                      $dateSubtract: {
+                        startDate: "$dueDate",
+                        unit: "day",
+                        amount: "$validUntil",
+                      },
+                    },
+                    // Format the dates into strings to ignore times
+                    format: "%G-%m-%d",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
   ];
   return model.aggregate(pipeline, false);
 };
