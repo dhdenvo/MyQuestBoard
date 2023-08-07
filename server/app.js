@@ -1,5 +1,8 @@
 require("dotenv").config();
+
 require("./middleware/mongoSetup");
+require("./middleware/discordSetup");
+
 const express = require("express");
 const app = express();
 const cors = require("cors");

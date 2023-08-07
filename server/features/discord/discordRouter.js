@@ -1,7 +1,5 @@
 const controller = require("./discordController");
 
 module.exports = (router) => {
-  router.post("/discord", ({ adventurer, body }) =>
-    controller.sendMessage(adventurer, body?.message)
-  );
+  router.post("/discord", controller.sendRouteMessage);
 };

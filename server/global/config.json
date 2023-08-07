@@ -6,5 +6,8 @@
     "COMPLETION": "completion",
     "BOOK": "book",
     "PAGE": "page"
+  },
+  "GLOBAL_CONNECTIONS": {
+    "DISCORD": "discord"
   }
 }

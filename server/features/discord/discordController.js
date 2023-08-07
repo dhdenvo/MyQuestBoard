@@ -1,12 +1,8 @@
-const clientPromise = require("./discordModel");
+const model = require("./discordModel");
 
-const sendMessage = async (adventurer, message) => {
-  const { discordId } = adventurer;
-  const client = await clientPromise;
-  const discUser = await client.users.fetch(discordId);
-  return await discUser.send(message);
-};
+const sendRouteMessage = ({ adventurer, body }) =>
+  model.sendMessage(adventurer, body?.message);
 
 module.exports = {
-  sendMessage,
+  sendRouteMessage,
 };

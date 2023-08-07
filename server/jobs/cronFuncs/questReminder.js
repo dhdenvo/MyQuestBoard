@@ -1,6 +1,6 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
 const { format } = require("date-fns");
-const { sendMessage } = require("../../features/discord/discordController");
+const { sendMessage } = require("../../features/discord/discordModel");
 
 const sendReminder = (quest) => {
   const message =
