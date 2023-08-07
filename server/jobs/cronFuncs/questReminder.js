@@ -1,5 +1,15 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
 const { format } = require("date-fns");
+const { sendMessage } = require("../../features/discord/discordController");
+
+const sendReminder = (quest) => {
+  const message =
+    `Hey, just a heads up - remember to do the quest "[${quest.title}](${process.env.GUILD_ADDRESS})"` +
+    `. Its due on ${quest.dueDate}, so make sure to do it`;
+
+  // Send discord message of quest to complete
+  return sendMessage(quest.adventurer, message);
+};
 
 module.exports = async () => {
   const time = format(new Date(), "HH:mm", {
@@ -43,8 +53,9 @@ module.exports = async () => {
         },
       ],
     },
-  });
+  }).populate("adventurer");
   if (!reminderQuests.length) return;
 
-  // Send discord message of quest to complete
+  // Send reminders for every quest that needs reminding
+  return await Promise.all(reminderQuests.map(sendReminder));
 };
