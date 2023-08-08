@@ -1,12 +1,17 @@
 import { Card, Typography } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
+import { useContext } from "react";
+import AdventurerContext from "../../../context/adventurer/adventurerContext";
+
 export default function AdventurerLogin({ adventurer }) {
-  console.log("adventurer", adventurer);
+  const adventurerContext = useContext(AdventurerContext);
+  const { loginAdventurer } = adventurerContext;
+
   return (
     <div className={`adventurer-${adventurer.name}`}>
       <Card
         variant="outlined"
-        onClick={() => console.log("SUPPP")}
+        onClick={() => loginAdventurer(adventurer._id)}
         sx={{ minWidth: 256 }}
       >
         <Avatar
