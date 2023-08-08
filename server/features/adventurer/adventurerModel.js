@@ -9,6 +9,7 @@ const adventurerSchema = Schema(
     rank: String,
     discordId: String,
     aiContext: String,
+    avatarUrl: String,
   },
   { versionKey: false }
 );
