@@ -30,4 +30,8 @@ module.exports = (router) => {
       return res.status(200).send();
     })(...data);
   });
+
+  router.get("/authed", (req, res) =>
+    res.json({ code: 200, size: 1, data: [req.isAuthenticated()] })
+  );
 };
