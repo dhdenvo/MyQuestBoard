@@ -24,6 +24,8 @@ export default function AdventurerState(props) {
         appliesTo: "adventurer",
         data: state.adventurers.find(({ _id }) => id === _id),
       });
+      // Once logged in, redirect the user to the homepage
+      window.location.replace("/");
     });
 
   return (

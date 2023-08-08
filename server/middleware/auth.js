@@ -17,17 +17,16 @@ passport.serializeUser((user, done) => {
 
 module.exports = (router) => {
   router.post("/login/:id", (...data) => {
-    const [req, res] = data;
+    const [req] = data;
     // Not using an auth system so able to swap profiles easily
     req.body = {
       username: req.params.id,
       password: "null",
     };
     // Set up auth redirect routes
-    passport.authenticate("local", (err, user, info) => {
-      if (err) return res.status(500).send();
-      if (!user) return res.status(400).json({ error: info.message });
-      return res.status(200).send();
+    passport.authenticate("local", {
+      successRedirect: "/api/authed",
+      failureRedirect: "/api/authed",
     })(...data);
   });
 
