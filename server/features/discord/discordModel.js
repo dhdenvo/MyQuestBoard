@@ -1,5 +1,6 @@
 const { discordConnProm } = require("../../global/globalConnections");
 
+// Send a discord direct message to an adventurer
 const sendMessage = async (adventurer, message) => {
   const client = await discordConnProm;
   const { discordId } = adventurer;
@@ -7,6 +8,7 @@ const sendMessage = async (adventurer, message) => {
   return await discUser.send(message);
 };
 
+// Handle direct messages using a given function
 const handleDirectMessage = async (func) => {
   const client = await discordConnProm;
   client.on("messageCreate", async (message) => {
