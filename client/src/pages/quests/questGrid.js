@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import QuestCard from "./questCard";
 
-export default function QuestGrid({ quests }) {
+export default function QuestGrid({ quests = [] }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid
