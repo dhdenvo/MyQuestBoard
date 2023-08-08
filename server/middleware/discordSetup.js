@@ -1,8 +1,11 @@
-const { Client, Events, GatewayIntentBits } = require("discord.js");
+const { Client, Events, GatewayIntentBits, Partials } = require("discord.js");
 const { discordSetConn } = require("../global/globalConnections");
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages],
+  partials: [Partials.Channel],
+});
 
 // Runs callback when the client is ready
 client.once(Events.ClientReady, (c) => {

@@ -8,6 +8,11 @@ const sendRouteMessage = async ({ adventurer, body }) => {
   return model.sendMessage(adventurer, message);
 };
 
+const directMessageHandler = (message) => {
+  console.log("Message", message);
+};
+
+model.handleDirectMessage(directMessageHandler);
 module.exports = {
   sendRouteMessage,
 };
