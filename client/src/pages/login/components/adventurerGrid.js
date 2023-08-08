@@ -8,7 +8,7 @@ export default function AdventurerGrid({ adventurers = [] }) {
     <Box sx={{ flexGrow: 1 }}>
       <Grid
         container
-        sx={{ pt: 2 }}
+        sx={{ pt: 2, justifyContent: "center" }}
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
