@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-export default function OutlinedCard(quest) {
+export default function QuestCard({ quest }) {
   const card = (
     <React.Fragment>
       <CardContent>
