@@ -4,20 +4,25 @@ const globalConnectionsList = Object.fromEntries(
   Object.values(GLOBAL_CONNECTIONS).map((conn) => [conn, null])
 );
 
-const getFuncs = Object.fromEntries(
-  Object.values(GLOBAL_CONNECTIONS).map((conn) => [
-    `${conn}Conn`,
-    () => globalConnectionsList[conn],
-  ])
+module.exports = Object.fromEntries(
+  Object.values(GLOBAL_CONNECTIONS)
+    .map((conn) => {
+      let resolveFunc;
+      const prom = new Promise((resolve) => (resolveFunc = resolve));
+      return [
+        // Create the generic get function (use once you know the connection is made, like in a route)
+        [`${conn}Conn`, () => globalConnectionsList[conn]],
+        // Create a promise that gives the connection
+        [`${conn}ConnProm`, prom],
+        // Create a function for setting the connection
+        [
+          `${conn}SetConn`,
+          (connection) => {
+            resolveFunc(connection);
+            globalConnectionsList[conn] = connection;
+          },
+        ],
+      ];
+    })
+    .flat()
 );
-
-const setFuncs = Object.fromEntries(
-  Object.values(GLOBAL_CONNECTIONS).map((conn) => [
-    `${conn}SetConn`,
-    (connection) => {
-      globalConnectionsList[conn] = connection;
-    },
-  ])
-);
-
-module.exports = { ...getFuncs, ...setFuncs };
