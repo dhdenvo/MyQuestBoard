@@ -10,10 +10,12 @@ function App() {
     <div className="App">
       <AuthHandler>
         <AdventurerState>
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <PageRouter />
-          </header>
+          <QuestState>
+            <header className="App-header">
+              <img src={logo} className="App-logo" alt="logo" />
+              <PageRouter />
+            </header>
+          </QuestState>
         </AdventurerState>
       </AuthHandler>
     </div>
