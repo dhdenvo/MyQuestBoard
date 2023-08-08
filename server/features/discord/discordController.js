@@ -1,4 +1,5 @@
 const { generateSingleResponse } = require("../shared/helpers/aiHelper");
+const alternateModels = require("../shared/helpers/alternateModels");
 const model = require("./discordModel");
 
 const sendRouteMessage = async ({ adventurer, body }) => {
@@ -8,8 +9,16 @@ const sendRouteMessage = async ({ adventurer, body }) => {
   return model.sendMessage(adventurer, message);
 };
 
-const directMessageHandler = (message) => {
-  console.log("Message", message);
+const directMessageHandler = async (message) => {
+  const adventurer = await alternateModels.ADVENTURER.findOne({
+    discordId: message?.author?.id,
+  });
+  if (!adventurer) return;
+  const response = await generateSingleResponse(
+    message.content,
+    adventurer.aiContext
+  );
+  model.sendMessage(adventurer, response);
 };
 
 model.handleDirectMessage(directMessageHandler);

@@ -1,11 +1,11 @@
 const { Router } = require("express");
 const questRouter = require("./features/quest/questRouter");
 const adventurerRouter = require("./features/adventurer/adventurerRouter");
-const discordRouter = require("./features/discord/discordRouter");
 const searchRouter = require("./features/search/searchRouter");
-const responseHandler = require("./middleware/responseHandler");
 const libraryRouter = require("./features/library/libraryRouter");
 const completionRouter = require("./features/completion/completionRouter");
+const discordRouter = require("./features/discord/discordRouter");
+const responseHandler = require("./middleware/responseHandler");
 const router = Router();
 
 const specialRouter = {};
