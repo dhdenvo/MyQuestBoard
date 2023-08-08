@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function (props) {
+export default function AuthHandler(props) {
   const [isAuthed, setIsAuthed] = useState(false);
 
   const isOnLoginPage = () => window.location.pathname === "/adventurers";
 
   const checkIsAuthed = async () => {
-    const res = await axios.get("http://localhost:8080/api/authed");
+    const res = await axios.get("/api/authed");
     const isAuthenticated = res?.data?.data[0];
     setIsAuthed(isAuthenticated);
     if (!isAuthenticated && !isOnLoginPage())
@@ -16,6 +16,7 @@ export default function (props) {
 
   useEffect(() => {
     checkIsAuthed();
+    // eslint-disable-next-line
   }, []);
 
   return isAuthed || isOnLoginPage() ? props.children : null;

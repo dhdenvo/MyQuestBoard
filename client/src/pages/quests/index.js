@@ -8,6 +8,7 @@ export default function QuestPage() {
 
   useEffect(() => {
     retrieveQuests();
+    // eslint-disable-next-line
   }, []);
 
   return <QuestGrid quests={quests} />;

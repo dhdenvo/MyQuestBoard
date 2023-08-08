@@ -12,14 +12,14 @@ export default function AdventurerState(props) {
 
   // Retrieve a list of adventurers
   const retrieveAdventurers = () =>
-    axios.get("http://localhost:8080/api/adventurers").then((res) => {
+    axios.get("/api/adventurers").then((res) => {
       if (res?.data)
         dispatch({ appliesTo: "adventurers", data: res?.data?.data });
     });
 
   // Login as a given adventurer
   const loginAdventurer = (id) =>
-    axios.post(`http://localhost:8080/api/login/${id}`).then(() => {
+    axios.post(`/api/login/${id}`).then(() => {
       dispatch({
         appliesTo: "adventurer",
         data: state.adventurers.find(({ _id }) => id === _id),
