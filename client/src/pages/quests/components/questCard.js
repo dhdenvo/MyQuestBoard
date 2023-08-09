@@ -1,17 +1,26 @@
-import * as React from "react";
+import { Fragment, useContext } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Icon } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import QuestContext from "../../../context/quest/questContext";
 
 export default function QuestCard({ quest }) {
+  const questContext = useContext(QuestContext);
+  const { getQuestImageUrl } = questContext;
+
   let card = (
-    <React.Fragment>
+    <Fragment>
       <CardContent>
+        <img
+          src={getQuestImageUrl(quest)}
+          srcSet={getQuestImageUrl(quest)}
+          alt={quest.title}
+          loading="lazy"
+        />
         <Typography variant="h5" component="div">
           {quest.title}
         </Typography>
@@ -32,7 +41,7 @@ export default function QuestCard({ quest }) {
           </Button>
         )}
       </CardActions>
-    </React.Fragment>
+    </Fragment>
   );
 
   if (quest.isComplete)

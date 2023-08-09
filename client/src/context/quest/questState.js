@@ -23,6 +23,9 @@ export default function QuestState(props) {
   // Set the current viewed quest
   const setQuest = (quest) => dispatch({ appliesTo: "quest", data: quest });
 
+  // Get the url that a given quest
+  const getQuestImageUrl = (quest) => `/api/image/quest/${quest.imagePath}`;
+
   return (
     <QuestContext.Provider
       value={{
@@ -31,6 +34,7 @@ export default function QuestState(props) {
         retrieveQuests,
         completeQuest,
         setQuest,
+        getQuestImageUrl,
       }}
     >
       {props.children}
