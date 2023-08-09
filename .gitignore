@@ -3,4 +3,4 @@ client/build
 package-lock.json
 .env
 server/scripts/*
-server/storedImages/*
+server/savedImages/*/*
