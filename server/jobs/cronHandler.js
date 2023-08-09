@@ -6,6 +6,7 @@ const CRONS = [
     runtime: "0 50 23 * * *",
   },
   { func: require("./cronFuncs/questReminder"), runtime: "0 * * * * *" },
+  { func: require("./cronFuncs/imageCreator"), runtime: "0 0 * * * *" },
 ];
 
 CRONS.map(({ func, runtime }) => {

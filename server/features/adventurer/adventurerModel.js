@@ -9,7 +9,7 @@ const adventurerSchema = Schema(
     rank: String,
     discordId: String,
     aiContext: String,
-    avatarUrl: String,
+    hasImage: { type: Boolean, default: false },
   },
   { versionKey: false }
 );
