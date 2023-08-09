@@ -9,7 +9,7 @@ export default function AdventurerSnippet({ adventurer }) {
   const adventurerContext = useContext(AdventurerContext);
   const { loginAdventurer, getAdventurerImageUrl } = adventurerContext;
 
-  const avatar = adventurer?.avatarUrl ? (
+  const avatar = adventurer?.hasImage ? (
     <Avatar
       alt={adventurer.name}
       src={getAdventurerImageUrl(adventurer)}
