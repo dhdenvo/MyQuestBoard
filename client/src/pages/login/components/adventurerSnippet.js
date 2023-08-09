@@ -29,7 +29,7 @@ export default function AdventurerSnippet({ adventurer }) {
       <Card
         variant="outlined"
         onClick={() => loginAdventurer(adventurer._id)}
-        sx={{ minWidth: 256, p: 1, m: 1 }}
+        sx={{ minWidth: 256, p: 1, m: 1, cursor: "pointer" }}
       >
         {avatar}
         <Typography variant="h3">{adventurer.name}</Typography>
