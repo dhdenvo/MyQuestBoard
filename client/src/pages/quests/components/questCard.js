@@ -10,17 +10,22 @@ import QuestContext from "../../../context/quest/questContext";
 
 export default function QuestCard({ quest }) {
   const questContext = useContext(QuestContext);
-  const { getQuestImageUrl } = questContext;
+  const { getQuestImageUrl, completeQuest } = questContext;
 
   let card = (
     <Fragment>
       <CardContent>
-        <img
-          src={getQuestImageUrl(quest)}
-          srcSet={getQuestImageUrl(quest)}
-          alt={quest.title}
-          loading="lazy"
-        />
+        {quest.hasImage ? (
+          <img
+            src={getQuestImageUrl(quest)}
+            srcSet={getQuestImageUrl(quest)}
+            alt={quest.title}
+            loading="lazy"
+            width="100%"
+          />
+        ) : (
+          <span />
+        )}
         <Typography variant="h5" component="div">
           {quest.title}
         </Typography>
@@ -36,7 +41,11 @@ export default function QuestCard({ quest }) {
         {quest.isComplete ? (
           <span />
         ) : (
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => completeQuest(quest._id)}
+          >
             Complete quest
           </Button>
         )}
@@ -51,9 +60,9 @@ export default function QuestCard({ quest }) {
           sx={{
             position: "absolute",
             rotate: "-40deg",
-            top: "30%",
-            left: "13%",
-            fontSize: 40,
+            top: "34%",
+            left: "0%",
+            fontSize: 60,
             color: "#03c00a",
             textDecoration: "underline",
           }}
@@ -75,7 +84,7 @@ export default function QuestCard({ quest }) {
     );
 
   return (
-    <Box sx={{ minWidth: 275 }}>
+    <Box sx={{ minWidth: 275, maxWidth: 275 }}>
       <Card
         variant="outlined"
         sx={{
