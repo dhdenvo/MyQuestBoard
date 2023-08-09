@@ -24,7 +24,7 @@ export default function QuestState(props) {
   const setQuest = (quest) => dispatch({ appliesTo: "quest", data: quest });
 
   // Get the url that a given quest
-  const getQuestImageUrl = (quest) => `/api/image/quest/${quest.imagePath}`;
+  const getQuestImageUrl = ({ _id }) => `/api/image/quests/${_id}.png`;
 
   return (
     <QuestContext.Provider

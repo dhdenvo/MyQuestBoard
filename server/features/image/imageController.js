@@ -1,7 +1,11 @@
 const model = require("./imageModel");
+const { STORED_IMAGE_LOC } = require("./imageConfig.json");
+const { dirname } = require("path");
 
 const getImage = ({ params }, res) => {
-  const { imagePath } = params;
+  const { folder, filename } = params;
+  const mainPath = dirname(require.main.filename);
+  const imagePath = `${mainPath}/${STORED_IMAGE_LOC}/${folder}/${filename}`;
   res.sendFile(imagePath);
 };
 

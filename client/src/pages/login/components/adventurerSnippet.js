@@ -7,12 +7,12 @@ const getColour = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
 
 export default function AdventurerSnippet({ adventurer }) {
   const adventurerContext = useContext(AdventurerContext);
-  const { loginAdventurer } = adventurerContext;
+  const { loginAdventurer, getAdventurerImageUrl } = adventurerContext;
 
   const avatar = adventurer?.avatarUrl ? (
     <Avatar
       alt={adventurer.name}
-      src={adventurer.avatarUrl}
+      src={getAdventurerImageUrl(adventurer)}
       sx={{ width: 256, height: 256 }}
     />
   ) : (

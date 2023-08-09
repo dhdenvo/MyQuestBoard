@@ -28,6 +28,10 @@ export default function AdventurerState(props) {
       window.location.replace("/");
     });
 
+  // Get the url that a given quest
+  const getAdventurerImageUrl = ({ _id }) =>
+    `/api/image/adventurers/${_id}.png`;
+
   return (
     <AdventurerContext.Provider
       value={{
@@ -35,6 +39,7 @@ export default function AdventurerState(props) {
         adventurer: state.adventurer,
         retrieveAdventurers,
         loginAdventurer,
+        getAdventurerImageUrl,
       }}
     >
       {props.children}
