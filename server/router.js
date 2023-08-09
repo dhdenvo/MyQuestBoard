@@ -6,6 +6,7 @@ const libraryRouter = require("./features/library/libraryRouter");
 const completionRouter = require("./features/completion/completionRouter");
 const discordRouter = require("./features/discord/discordRouter");
 const responseHandler = require("./middleware/responseHandler");
+const imageRouter = require("./features/image/imageRouter");
 const router = Router();
 
 const specialRouter = {};
@@ -27,5 +28,6 @@ discordRouter(specialRouter);
 searchRouter(specialRouter);
 completionRouter(specialRouter);
 libraryRouter(specialRouter);
+imageRouter(router);
 
 module.exports = router;
