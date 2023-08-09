@@ -4,7 +4,7 @@
   "description": "Personal website for daily activities, progress tracking, and other personal tools.",
   "main": "server/app.js",
   "scripts": {
-    "server": "nodemon server/app.js"
+    "server": "nodemon --watch server server/app.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/dhdenvo/MyQuestBoard#readme",
   "dependencies": {
+    "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
