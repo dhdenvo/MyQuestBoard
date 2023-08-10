@@ -22,12 +22,14 @@ export default function AppHeader() {
             <span style={{ width: "175px", display: "flex" }}>
               <Button
                 key={name}
+                disabled={window.location.href.endsWith(path)}
                 onClick={() => (window.location.href = `/${path}`)}
                 sx={{
                   my: 2,
                   pl: 2,
                   color: "white",
                   display: "flex",
+                  "&.Mui-disabled": { color: "#c0c0c0" },
                 }}
               >
                 {createElement(logo, { sx: { pr: 1, fontSize: 50 } })}
