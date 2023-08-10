@@ -4,9 +4,12 @@ const alternateModels = require("../../features/shared/helpers/alternateModels")
 const { COLLECTION_NAMES } = require("../../global/config.json");
 
 // The list of collections that store an image
-const COLLECTIONS = [COLLECTION_NAMES.ADVENTURER, COLLECTION_NAMES.QUEST].map(
-  (collection) =>
-    Object.entries(COLLECTION_NAMES).find(([_, val]) => val === collection)
+const COLLECTIONS = [
+  COLLECTION_NAMES.ADVENTURER,
+  COLLECTION_NAMES.QUEST,
+  COLLECTION_NAMES.BOOK,
+].map((collection) =>
+  Object.entries(COLLECTION_NAMES).find(([_, val]) => val === collection)
 );
 
 const getGenerationText = (collection, doc) => {
@@ -15,6 +18,8 @@ const getGenerationText = (collection, doc) => {
       return `anime character: ${doc.aiContext}`;
     case COLLECTION_NAMES.QUEST:
       return `anime ${doc.title}: ${doc.description}`;
+    case COLLECTION_NAMES.BOOK:
+      return `anime ${doc.title}`;
   }
   throw "Invalid collection";
 };
@@ -40,5 +45,4 @@ module.exports = async () => {
     })
   ).flat();
   await Promise.all(updateProms);
-  console.log("DONE");
 };

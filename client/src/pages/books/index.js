@@ -4,7 +4,6 @@ import BookGrid from "./components/bookGrid";
 
 export default function BookPage() {
   const libraryContext = useContext(LibraryContext);
-  console.log("Shat", libraryContext);
   const { books, retrieveBooks } = libraryContext;
 
   useEffect(() => {

@@ -12,6 +12,7 @@ const bookSchema = Schema(
     },
     description: { type: String, default: "" },
     originalSource: { type: String, default: "" },
+    hasImage: { type: Boolean, default: false },
   },
   { versionKey: false }
 );

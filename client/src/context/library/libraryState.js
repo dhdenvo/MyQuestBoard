@@ -23,7 +23,7 @@ export default function LibraryState(props) {
     });
 
   // Get the url that a given book
-  const getBookImageUrl = ({ _id }) => `/api/image/book/${_id}.png`;
+  const getBookImageUrl = ({ _id }) => `/api/image/books/${_id}.png`;
 
   return (
     <LibraryContext.Provider
