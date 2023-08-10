@@ -19,7 +19,7 @@ export default function LibraryState(props) {
   // Retrieve a specific page
   const retrievePage = (id) =>
     axios.get(`/api/library/page/${id}`).then((res) => {
-      if (res?.data) dispatch({ appliesTo: "page", data: res?.data?.data });
+      if (res?.data) dispatch({ appliesTo: "page", data: res?.data?.data[0] });
     });
 
   // Get the url that a given book
