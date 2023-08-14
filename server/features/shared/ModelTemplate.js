@@ -20,7 +20,7 @@ class ModelTemplate {
   createMany = (docs) => this.dbModel.insertMany(docs);
   updateOne = (query, updateDoc) => this.dbModel.updateOne(query, updateDoc);
 
-  aggregate = (pipeline = [], autoPopulate = true) => {
+  aggregate = (pipeline = [], autoPopulate = false) => {
     const agg = this.dbModel.aggregate(pipeline);
     if (!autoPopulate || !this.popPath) return agg;
     return agg.then((docs) =>

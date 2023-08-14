@@ -51,19 +51,16 @@ const getPage = async ({ params, query }) => {
     $project: { _id: 0, pageTitle: 1, pageNum: 1, followsPath: 1 },
   });
 
-  return pageModel.aggregate(
-    [
-      { $match: { _id: new Types.ObjectId(params.pageId) } },
-      {
-        $lookup: {
-          from: COLLECTION_NAMES.PAGE,
-          pipeline: nextPagePipeline,
-          as: "nextPages",
-        },
+  return pageModel.aggregate([
+    { $match: { _id: new Types.ObjectId(params.pageId) } },
+    {
+      $lookup: {
+        from: COLLECTION_NAMES.PAGE,
+        pipeline: nextPagePipeline,
+        as: "nextPages",
       },
-    ],
-    false
-  );
+    },
+  ]);
 };
 
 module.exports = {

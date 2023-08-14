@@ -67,7 +67,7 @@ const getQuests = ({ adventurer }) => {
       },
     },
   ];
-  return model.aggregate(pipeline, false);
+  return model.aggregate(pipeline);
 };
 
 // A simple create quest function from a quest object
