@@ -10,6 +10,11 @@ const bookSchema = Schema(
       ref: COLLECTION_NAMES.PAGE,
       default: null,
     },
+    adventurer: {
+      type: Schema.Types.ObjectId,
+      ref: COLLECTION_NAMES.ADVENTURER,
+      default: null,
+    },
     description: { type: String, default: "" },
     originalSource: { type: String, default: "" },
     hasImage: { type: Boolean, default: false },
