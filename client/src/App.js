@@ -13,8 +13,9 @@ function App() {
         <AdventurerState>
           <QuestState>
             <LibraryState>
-              <AppHeader />
-              <PageRouter />
+              <AppHeader>
+                <PageRouter />
+              </AppHeader>
             </LibraryState>
           </QuestState>
         </AdventurerState>

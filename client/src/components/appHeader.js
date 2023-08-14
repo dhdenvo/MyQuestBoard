@@ -13,7 +13,7 @@ const pages = [
   { name: "Adventurers", path: "adventurers", logo: EmojiPeopleIcon },
 ];
 
-export default function AppHeader() {
+export default function AppHeader({ children }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ alignItems: "center" }}>
@@ -39,6 +39,7 @@ export default function AppHeader() {
           ))}
         </Toolbar>
       </AppBar>
+      {children}
     </Box>
   );
 }
