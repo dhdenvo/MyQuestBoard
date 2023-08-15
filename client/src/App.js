@@ -32,7 +32,7 @@ function App() {
             <QuestState>
               <LibraryState>
                 <AppHeader>
-                  <Grid container sx={{ p: "1%", height: "91vh" }}>
+                  <Grid container sx={{ p: "1%", minHeight: "91vh" }}>
                     <Grid item xs={2} />
                     <Grid
                       item
