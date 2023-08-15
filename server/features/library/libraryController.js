@@ -60,6 +60,18 @@ const getPage = async ({ params, query }) => {
         as: "nextPages",
       },
     },
+    {
+      $lookup: {
+        from: COLLECTION_NAMES.PAGE,
+        let: { prevPage: "$prevPage" },
+        pipeline: [
+          { $match: { $expr: { $eq: ["$$prevPage", "$_id"] } } },
+          { $project: { pageTitle: 1, pageNum: 1 } },
+        ],
+        as: "prevPage",
+      },
+    },
+    { $unwind: { path: "$prevPage", preserveNullAndEmptyArrays: true } },
   ]);
 };
 
