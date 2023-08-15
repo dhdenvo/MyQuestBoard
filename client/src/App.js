@@ -20,6 +20,10 @@ const theme = createTheme({
     backing: {
       main: "#E0E0E0",
     },
+    paper: {
+      main: "#FFF9ED",
+      border: "#FFE09E",
+    },
   },
 });
 
@@ -37,7 +41,11 @@ function App() {
                     <Grid
                       item
                       xs={8}
-                      sx={{ backgroundColor: "backing.main", p: "1%" }}
+                      sx={{
+                        backgroundColor: "backing.main",
+                        p: "1%",
+                        border: 3,
+                      }}
                     >
                       <PageRouter />
                     </Grid>
