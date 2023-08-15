@@ -10,7 +10,7 @@ const imageRouter = require("./features/image/imageRouter");
 const router = Router();
 
 const specialRouter = {};
-["get", "post", "put", "patch"].forEach((name) => {
+["get", "post", "put", "patch", "delete"].forEach((name) => {
   specialRouter[name] = (route, callback) =>
     router[name](route, (req, res) =>
       responseHandler(

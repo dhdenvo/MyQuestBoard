@@ -12,6 +12,11 @@ const savePath = ({ params }) =>
     { _id: params.bookId },
     { $push: { paths: new Types.ObjectId(params.pageId) } }
   );
+const deletePath = ({ params }) =>
+  bookModel.updateOne(
+    { _id: params.bookId },
+    { $pull: { paths: new Types.ObjectId(params.pageId) } }
+  );
 
 // Get the page along with its next pages with a value if the next pages follow the given path
 const getPage = async ({ params, query }) => {
@@ -80,4 +85,5 @@ module.exports = {
   getBook,
   getPage,
   savePath,
+  deletePath,
 };
