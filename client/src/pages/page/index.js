@@ -1,8 +1,9 @@
 import { useContext, useEffect } from "react";
 import LibraryContext from "../../context/library/libraryContext";
-import { Box, Button, Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { MuiMarkdown } from "mui-markdown";
+import NextPages from "./components/nextPages";
+import PageContents from "./components/pageContents";
 
 export default function BookPage() {
   const libraryContext = useContext(LibraryContext);
@@ -21,31 +22,9 @@ export default function BookPage() {
       spacing={{ xs: 12, md: 1 }}
       columns={{ xs: 4, sm: 8, md: 12 }}
     >
-      <Box
-        sx={{
-          minWidth: "80%",
-          maxWidth: "80%",
-          textAlign: "left",
-          color: "black",
-          backgroundColor: "#c2c6d0",
-        }}
-      >
-        <MuiMarkdown>{page?.content}</MuiMarkdown>
-      </Box>
-      {(page?.nextPages || []).map((nextPage) => (
-        <Grid item xs={12}>
-          <Button
-            size="small"
-            variant="contained"
-            sx={{ textTransform: "none" }}
-            onClick={() =>
-              (window.location.href = `/library/page/${nextPage._id}`)
-            }
-          >
-            {nextPage?.pageTitle}
-          </Button>
-        </Grid>
-      ))}
+      <Typography variant="h1">{page?.pageTitle}</Typography>
+      <PageContents page={page} />
+      <NextPages page={page} />
     </Grid>
   );
 }
