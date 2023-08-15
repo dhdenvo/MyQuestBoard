@@ -77,6 +77,19 @@ const getPage = async ({ params, query }) => {
       },
     },
     { $unwind: { path: "$prevPage", preserveNullAndEmptyArrays: true } },
+    {
+      $lookup: {
+        from: COLLECTION_NAMES.BOOK,
+        let: { book: "$book" },
+        pipeline: [
+          { $match: { $expr: { $eq: ["$$book", "$_id"] } } },
+          { $project: { paths: 1, title: 1 } },
+        ],
+        as: "book",
+      },
+    },
+    { $unwind: { path: "$book", preserveNullAndEmptyArrays: true } },
+    { $addFields: { pathSaved: { $in: ["$_id", "$book.paths"] } } },
   ]);
 };
 
