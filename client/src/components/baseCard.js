@@ -9,12 +9,14 @@ export default function BaseCard({ doc, imageGetter, children }) {
   let card = (
     <CardContent>
       {doc.hasImage ? (
-        <img
+        <Box
+          component="img"
           src={imageGetter(doc)}
-          srcSet={imageGetter(doc)}
+          sx={{
+            width: "100%",
+            minHeight: "224px",
+          }}
           alt={doc.title}
-          loading="lazy"
-          width="100%"
         />
       ) : (
         <></>
