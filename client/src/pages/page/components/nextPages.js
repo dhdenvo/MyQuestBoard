@@ -6,6 +6,7 @@ export default function NextPages({ page }) {
       <Button
         size="small"
         variant="contained"
+        color={nextPage?.followsPath ? "special" : "common"}
         sx={{ textTransform: "none" }}
         onClick={() => (window.location.href = `/library/page/${nextPage._id}`)}
       >
