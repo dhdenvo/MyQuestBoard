@@ -48,7 +48,7 @@ const getPage = async ({ params, query }) => {
     });
   }
   nextPagePipeline.push({
-    $project: { _id: 0, pageTitle: 1, pageNum: 1, followsPath: 1 },
+    $project: { _id: 1, pageTitle: 1, pageNum: 1, followsPath: 1 },
   });
 
   return pageModel.aggregate([
