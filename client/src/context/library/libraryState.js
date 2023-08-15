@@ -7,6 +7,7 @@ export default function LibraryState(props) {
   const initialState = {
     books: [],
     page: null,
+    path: null,
   };
   const [state, dispatch] = useReducer(LibraryReducer, initialState);
 
@@ -17,22 +18,30 @@ export default function LibraryState(props) {
     });
 
   // Retrieve a specific page
-  const retrievePage = (id) =>
-    axios.get(`/api/library/page/${id}`).then((res) => {
+  const retrievePage = (id) => {
+    const params = {};
+    if (state.path) params.path = state.path;
+    axios.get(`/api/library/page/${id}`, { params }).then((res) => {
       if (res?.data) dispatch({ appliesTo: "page", data: res?.data?.data[0] });
     });
+  };
 
   // Get the url that a given book
   const getBookImageUrl = ({ _id }) => `/api/image/books/${_id}.png`;
+
+  // Set the path that the reader is on
+  const setPath = (path) => dispatch({ appliesTo: "path", data: path });
 
   return (
     <LibraryContext.Provider
       value={{
         books: state.books,
         page: state.page,
+        path: state.path,
         retrieveBooks,
         retrievePage,
         getBookImageUrl,
+        setPath,
       }}
     >
       {props.children}
