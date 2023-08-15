@@ -51,13 +51,13 @@ export default function BookPage() {
       <Grid item xs={12}>
         <PageContents page={page} />
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={4}>
         <PageButton page={page?.prevPage} />
       </Grid>
-      <Grid item xs={8} />
-      <Grid container item xs={2}>
+      <Grid item xs={4} />
+      <Grid container item xs={4}>
         {(page?.nextPages || []).map((nextPage) => (
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ p: 0.5 }}>
             <PageButton page={nextPage} isForward />
           </Grid>
         ))}
