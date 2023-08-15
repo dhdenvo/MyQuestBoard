@@ -33,11 +33,17 @@ export default function LibraryState(props) {
   const setPath = (path) => dispatch({ appliesTo: "path", data: path });
 
   // Save a path to a book
-  const savePath = ({ _id, book }) =>
+  const savePath = ({ _id, book }) => {
     axios.put(`/api/library/book/${book._id}/page/${_id}/path`);
+    const newPage = { ...state.page, pathSaved: true };
+    dispatch({ appliesTo: "page", data: newPage });
+  };
   // Remove a path from a book
-  const removePath = ({ _id, book }) =>
+  const removePath = ({ _id, book }) => {
     axios.delete(`/api/library/book/${book._id}/page/${_id}/path`);
+    const newPage = { ...state.page, pathSaved: false };
+    dispatch({ appliesTo: "page", data: newPage });
+  };
 
   return (
     <LibraryContext.Provider
