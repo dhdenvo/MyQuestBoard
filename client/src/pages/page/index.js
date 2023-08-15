@@ -1,16 +1,25 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import LibraryContext from "../../context/library/libraryContext";
-import { ButtonBase, Grid, Typography } from "@mui/material";
+import {
+  ButtonBase,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
 import PageButton from "./components/pageButton";
 import PageContents from "./components/pageContents";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
+import SavedSearchIcon from "@mui/icons-material/SavedSearch";
 
 export default function BookPage() {
   const libraryContext = useContext(LibraryContext);
   const { page, retrievePage, removePath, savePath } = libraryContext;
   const { pageId } = useParams();
+
+  const [searchIn, setSearchIn] = useState("");
 
   useEffect(() => {
     retrievePage(pageId);
@@ -54,7 +63,32 @@ export default function BookPage() {
       <Grid item xs={4}>
         <PageButton page={page?.prevPage} />
       </Grid>
-      <Grid item xs={4} />
+      <Grid item xs={1} />
+      <Grid item xs={2}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            searchPage(searchIn);
+          }}
+        >
+          <TextField
+            sx={{ mt: 2 }}
+            id="standard-basic"
+            label="Page search"
+            type="search"
+            variant="filled"
+            onChange={(e) => setSearchIn(e?.target?.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SavedSearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </form>
+      </Grid>
+      <Grid item xs={1} />
       <Grid container item xs={4}>
         {(page?.nextPages || []).map((nextPage) => (
           <Grid item xs={12} sx={{ p: 0.5 }}>

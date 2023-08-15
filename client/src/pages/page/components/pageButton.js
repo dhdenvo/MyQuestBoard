@@ -3,7 +3,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export default function NextPages({ page, isForward }) {
-  console.log("DIRECTION", isForward);
   if (!page) return <></>;
   return (
     <Button
