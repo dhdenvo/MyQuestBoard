@@ -5,7 +5,7 @@ import QuestState from "./context/quest/questState";
 import AuthHandler from "./context/auth/authHandler";
 import LibraryState from "./context/library/libraryState";
 import AppHeader from "./components/appHeader";
-import { ThemeProvider, createTheme } from "@mui/material";
+import { Grid, ThemeProvider, createTheme } from "@mui/material";
 
 const theme = createTheme({
   palette: {
@@ -16,6 +16,9 @@ const theme = createTheme({
     special: {
       main: "#D1C030",
       contrastText: "#FFFFFF",
+    },
+    backing: {
+      main: "#E0E0E0",
     },
   },
 });
@@ -29,7 +32,17 @@ function App() {
             <QuestState>
               <LibraryState>
                 <AppHeader>
-                  <PageRouter />
+                  <Grid container sx={{ p: "1%" }}>
+                    <Grid item xs={2} />
+                    <Grid
+                      item
+                      xs={8}
+                      sx={{ backgroundColor: "backing.main", p: "1%" }}
+                    >
+                      <PageRouter />
+                    </Grid>
+                    <Grid item xs={2} />
+                  </Grid>
                 </AppHeader>
               </LibraryState>
             </QuestState>
