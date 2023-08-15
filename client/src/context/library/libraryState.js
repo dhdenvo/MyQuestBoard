@@ -32,6 +32,13 @@ export default function LibraryState(props) {
   // Set the path that the reader is on
   const setPath = (path) => dispatch({ appliesTo: "path", data: path });
 
+  // Save a path to a book
+  const savePath = ({ _id, book }) =>
+    axios.put(`/api/library/book/${book._id}/page/${_id}/path`);
+  // Remove a path from a book
+  const removePath = ({ _id, book }) =>
+    axios.delete(`/api/library/book/${book._id}/page/${_id}/path`);
+
   return (
     <LibraryContext.Provider
       value={{
@@ -42,6 +49,8 @@ export default function LibraryState(props) {
         retrievePage,
         getBookImageUrl,
         setPath,
+        savePath,
+        removePath,
       }}
     >
       {props.children}
