@@ -22,7 +22,15 @@ export default function LibraryState(props) {
     const params = {};
     if (state.path) params.path = state.path;
     axios.get(`/api/library/page/${id}`, { params }).then((res) => {
-      if (res?.data) dispatch({ appliesTo: "page", data: res?.data?.data[0] });
+      if (res?.data) dispatch({ appliesTo: "page", data: res.data.data[0] });
+    });
+  };
+
+  // Retrieve a specific page
+  const searchForPage = (bookId, searchInfo) => {
+    axios.get(`/api/library/book/${bookId}/page/${searchInfo}`).then((res) => {
+      if (res?.data?.data?.length)
+        window.location.href = `/library/page/${res.data.data[0]._id}`;
     });
   };
 
@@ -57,6 +65,7 @@ export default function LibraryState(props) {
         setPath,
         savePath,
         removePath,
+        searchForPage,
       }}
     >
       {props.children}

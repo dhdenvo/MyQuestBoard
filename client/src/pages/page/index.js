@@ -16,7 +16,8 @@ import SavedSearchIcon from "@mui/icons-material/SavedSearch";
 
 export default function BookPage() {
   const libraryContext = useContext(LibraryContext);
-  const { page, retrievePage, removePath, savePath } = libraryContext;
+  const { page, retrievePage, removePath, savePath, searchForPage } =
+    libraryContext;
   const { pageId } = useParams();
 
   const [searchIn, setSearchIn] = useState("");
@@ -68,7 +69,7 @@ export default function BookPage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            searchPage(searchIn);
+            searchForPage(page.book._id, searchIn);
           }}
         >
           <TextField

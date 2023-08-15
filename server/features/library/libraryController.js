@@ -17,6 +17,14 @@ const deletePath = ({ params }) =>
     { _id: params.bookId },
     { $pull: { paths: new Types.ObjectId(params.pageId) } }
   );
+const searchForPage = ({ params }) =>
+  pageModel
+    .findMany({
+      book: new Types.ObjectId(params.bookId),
+      // In the future use this to search for titles & content as well
+      pageNum: params.searchInput,
+    })
+    .limit(1);
 
 // Get the page along with its next pages with a value if the next pages follow the given path
 const getPage = async ({ params, query }) => {
@@ -97,6 +105,7 @@ module.exports = {
   getBooks,
   getBook,
   getPage,
+  searchForPage,
   savePath,
   deletePath,
 };
