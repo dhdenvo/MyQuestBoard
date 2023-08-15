@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
-export default function BaseCard({ doc, imageGetter, children }) {
+export default function BaseCard({ doc, imageGetter, onClick, children }) {
   let card = (
     <CardContent>
       {doc.hasImage ? (
@@ -64,9 +64,10 @@ export default function BaseCard({ doc, imageGetter, children }) {
           minWidth: 256,
           p: 1,
           m: 1,
-          cursor: "pointer",
+          cursor: onClick ? "pointer" : undefined,
           position: "relative",
         }}
+        onClick={onClick || (() => {})}
       >
         {card}
       </Card>

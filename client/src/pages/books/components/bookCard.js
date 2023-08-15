@@ -8,7 +8,11 @@ export default function BookCard({ book }) {
   const { getBookImageUrl } = libraryContext;
 
   return (
-    <BaseCard imageGetter={getBookImageUrl} doc={book}>
+    <BaseCard
+      imageGetter={getBookImageUrl}
+      doc={book}
+      onClick={() => window.location.replace(`/library/page/${book.firstPage}`)}
+    >
       <Typography variant="h5" component="div">
         {book.title}
       </Typography>
