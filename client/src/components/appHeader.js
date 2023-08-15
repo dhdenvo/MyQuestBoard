@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import ShieldIcon from "@mui/icons-material/Shield";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
+import { Grid } from "@mui/material";
 
 const pages = [
   { name: "Quests", path: "quests", logo: ShieldIcon },
@@ -18,25 +19,27 @@ export default function AppHeader({ children }) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ alignItems: "center" }}>
         <Toolbar>
-          {pages.map(({ name, path, logo }) => (
-            <span style={{ width: "175px", display: "flex" }}>
-              <Button
-                key={name}
-                disabled={window.location.href.endsWith(path)}
-                onClick={() => (window.location.href = `/${path}`)}
-                sx={{
-                  my: 2,
-                  pl: 2,
-                  color: "white",
-                  display: "flex",
-                  "&.Mui-disabled": { color: "#c0c0c0" },
-                }}
-              >
-                {createElement(logo, { sx: { pr: 1, fontSize: 50 } })}
-                {name}
-              </Button>
-            </span>
-          ))}
+          <Grid container>
+            {pages.map(({ name, path, logo }) => (
+              <Grid item xs={12 / pages.length}>
+                <Button
+                  key={name}
+                  disabled={window.location.href.endsWith(path)}
+                  onClick={() => (window.location.href = `/${path}`)}
+                  sx={{
+                    my: 2,
+                    pl: 2,
+                    color: "white",
+                    display: "flex",
+                    "&.Mui-disabled": { color: "#c0c0c0" },
+                  }}
+                >
+                  {createElement(logo, { sx: { pr: 1, fontSize: 50 } })}
+                  {name}
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
         </Toolbar>
       </AppBar>
       {children}
