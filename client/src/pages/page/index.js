@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import PageButton from "./components/pageButton";
-import PageContents from "./components/pageContents";
+import ReadContents from "../../components/readContents";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import SavedSearchIcon from "@mui/icons-material/SavedSearch";
@@ -30,7 +30,13 @@ export default function BookPage() {
   return (
     <Grid container sx={{ justifyContent: "center" }}>
       <Grid item xs={12}>
-        <Typography variant="h4" sx={{ textAlign: "left" }}>
+        <Typography
+          variant="h4"
+          sx={{ textAlign: "left", cursor: "pointer" }}
+          onClick={() =>
+            (window.location.href = `/library/book/${page.book._id}`)
+          }
+        >
           {page?.book?.title}
         </Typography>
       </Grid>
@@ -59,7 +65,7 @@ export default function BookPage() {
       </Grid>
       <Grid item xs={2} />
       <Grid item xs={12}>
-        <PageContents page={page} />
+        <ReadContents content={page?.content} />
       </Grid>
       <Grid item xs={4}>
         <PageButton page={page?.prevPage} />

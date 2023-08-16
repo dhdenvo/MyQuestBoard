@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import MuiMarkdown from "mui-markdown";
 
-export default function PageContents({ page }) {
+export default function ReadContents({ content }) {
   return (
     <Box
       sx={{
@@ -13,7 +13,7 @@ export default function PageContents({ page }) {
         p: 1,
       }}
     >
-      <MuiMarkdown>{page?.content}</MuiMarkdown>
+      <MuiMarkdown>{content}</MuiMarkdown>
     </Box>
   );
 }
