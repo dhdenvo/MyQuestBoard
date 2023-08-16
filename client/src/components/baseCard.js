@@ -15,6 +15,7 @@ export default function BaseCard({ doc, imageGetter, onClick, children }) {
           sx={{
             width: "100%",
             minHeight: "224px",
+            border: 2,
           }}
           alt={doc.title}
         />
