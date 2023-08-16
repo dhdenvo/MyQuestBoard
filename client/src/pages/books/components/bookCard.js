@@ -11,7 +11,7 @@ export default function BookCard({ book }) {
     <BaseCard
       imageGetter={getBookImageUrl}
       doc={book}
-      onClick={() => window.location.replace(`/library/page/${book.firstPage}`)}
+      onClick={() => (window.location.href = `/library/book/${book._id}`)}
     >
       <Typography variant="h5" component="div">
         {book.title}
