@@ -18,12 +18,12 @@ export default function BookPage() {
   const libraryContext = useContext(LibraryContext);
   const { page, retrievePage, removePath, savePath, searchForPage } =
     libraryContext;
-  const { pageId } = useParams();
+  const { pageId, pathId } = useParams();
 
   const [searchIn, setSearchIn] = useState("");
 
   useEffect(() => {
-    retrievePage(pageId);
+    retrievePage(pageId, pathId);
     // eslint-disable-next-line
   }, []);
 
@@ -68,7 +68,7 @@ export default function BookPage() {
         <ReadContents content={page?.content} />
       </Grid>
       <Grid item xs={4}>
-        <PageButton page={page?.prevPage} />
+        <PageButton page={page?.prevPage} path={pathId} />
       </Grid>
       <Grid item xs={1} />
       <Grid item xs={2}>
@@ -99,7 +99,7 @@ export default function BookPage() {
       <Grid container item xs={4}>
         {(page?.nextPages || []).map((nextPage) => (
           <Grid item xs={12} sx={{ p: 0.5 }}>
-            <PageButton page={nextPage} isForward />
+            <PageButton page={nextPage} isForward path={pathId} />
           </Grid>
         ))}
       </Grid>
