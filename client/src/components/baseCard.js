@@ -8,10 +8,10 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 export default function BaseCard({ doc, imageGetter, onClick, children }) {
   let card = (
     <CardContent>
-      {doc.hasImage ? (
+      {doc?.hasImage ? (
         <Box
           component="img"
-          src={imageGetter(doc)}
+          src={imageGetter(doc) || ""}
           sx={{
             width: "100%",
             minHeight: "224px",
@@ -26,7 +26,7 @@ export default function BaseCard({ doc, imageGetter, onClick, children }) {
   );
 
   // If the card is complete, cover it in the complete symbol
-  if (doc.isComplete)
+  if (doc?.isComplete)
     card = (
       <Fragment>
         <Typography
