@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import LibraryContext from "../../context/library/libraryContext";
-import BookGrid from "./components/bookGrid";
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import BookCard from "./components/bookCard";
 
 export default function BookPage() {
   const libraryContext = useContext(LibraryContext);
@@ -13,9 +13,17 @@ export default function BookPage() {
   }, []);
 
   return (
-    <div className="libraryPage">
-      <Typography variant="h1"> Library </Typography>
-      <BookGrid books={books} />
-    </div>
+    <Grid container>
+      <Grid xs={12}>
+        <Typography variant="h1"> Library </Typography>
+      </Grid>
+      <Grid container item xs={12} sx={{ justifyContent: "center" }}>
+        {(books || []).map((book) => (
+          <Grid item xs={3}>
+            <BookCard book={book} key={book._id} />
+          </Grid>
+        ))}
+      </Grid>
+    </Grid>
   );
 }
