@@ -52,7 +52,6 @@ function App() {
                       item
                       desktop={8}
                       mobVer={12}
-                      mobHor={12}
                       sx={{
                         backgroundColor: "backing.main",
                         p: "1%",
