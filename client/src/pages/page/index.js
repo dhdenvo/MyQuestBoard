@@ -29,7 +29,7 @@ export default function BookPage() {
 
   return (
     <Grid container sx={{ justifyContent: "center" }}>
-      <Grid item xs={12}>
+      <Grid item desktop={12}>
         <Typography
           variant="h4"
           sx={{ textAlign: "left", cursor: "pointer" }}
@@ -40,13 +40,13 @@ export default function BookPage() {
           {page?.book?.title}
         </Typography>
       </Grid>
-      <Grid item xs={10}>
+      <Grid item desktop={10}>
         <Typography variant="h2" sx={{ textAlign: "left" }}>
           {page?.pageTitle}
         </Typography>
       </Grid>
-      <Grid container item xs={2}>
-        <Grid item xs={12}>
+      <Grid container item desktop={2}>
+        <Grid item desktop={12}>
           {page?.pathSaved ? (
             <ButtonBase onClick={() => removePath(page)}>
               <StarIcon color="special" />
@@ -59,19 +59,19 @@ export default function BookPage() {
             </ButtonBase>
           )}
         </Grid>
-        <Grid item xs={12}>
+        <Grid item desktop={12}>
           <Typography>Page {page?.pageNum}</Typography>
         </Grid>
       </Grid>
-      <Grid item xs={2} />
-      <Grid item xs={12}>
+      <Grid item desktop={2} />
+      <Grid item desktop={12}>
         <ReadContents content={page?.content} />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item desktop={4}>
         <PageButton page={page?.prevPage} path={pathId} />
       </Grid>
-      <Grid item xs={1} />
-      <Grid item xs={2}>
+      <Grid item desktop={1} />
+      <Grid item desktop={2}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -95,10 +95,10 @@ export default function BookPage() {
           />
         </form>
       </Grid>
-      <Grid item xs={1} />
-      <Grid container item xs={4}>
+      <Grid item desktop={1} />
+      <Grid container item desktop={4}>
         {(page?.nextPages || []).map((nextPage) => (
-          <Grid item xs={12} sx={{ p: 0.5 }}>
+          <Grid item desktop={12} sx={{ p: 0.5 }}>
             <PageButton page={nextPage} isForward path={pathId} />
           </Grid>
         ))}

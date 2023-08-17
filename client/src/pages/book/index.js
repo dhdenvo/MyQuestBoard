@@ -29,12 +29,12 @@ export default function BookPage() {
   return (
     <div className="libraryPage">
       <Grid container>
-        <Grid item xs={11} sx={{ textAlign: "left" }}>
+        <Grid item desktop={11} sx={{ textAlign: "left" }}>
           <Typography variant="h1" sx={{ fontSize: "3em" }}>
             {book?.title}
           </Typography>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item desktop={1}>
           {book?.hasImage ? (
             <Box
               component="img"
@@ -49,10 +49,10 @@ export default function BookPage() {
             <></>
           )}
         </Grid>
-        <Grid item xs={12} sx={{ textAlign: "left" }}>
+        <Grid item desktop={12} sx={{ textAlign: "left" }}>
           <ReadContents content={book?.description} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item desktop={12}>
           <Button
             size="large"
             variant="contained"
@@ -66,21 +66,21 @@ export default function BookPage() {
         </Grid>
         {book?.paths?.length ? (
           <Fragment>
-            <Grid item xs={2}>
+            <Grid item desktop={2}>
               <Typography variant="h4">Saved paths:</Typography>
             </Grid>
-            <Grid item xs={8} />
-            <Grid item xs={2}>
+            <Grid item desktop={8} />
+            <Grid item desktop={2}>
               {viewOriginalButton}
             </Grid>
-            <Grid item xs={12} sx={{ p: 2 }}>
+            <Grid item desktop={12} sx={{ p: 2 }}>
               <PathGrid book={book} />
             </Grid>
           </Fragment>
         ) : (
           <Fragment>
-            <Grid item xs={10} />
-            <Grid item xs={2}>
+            <Grid item desktop={10} />
+            <Grid item desktop={2}>
               {viewOriginalButton}
             </Grid>
           </Fragment>
