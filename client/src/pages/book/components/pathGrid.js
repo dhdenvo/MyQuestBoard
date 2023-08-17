@@ -6,12 +6,7 @@ import { Typography } from "@mui/material";
 export default function PathGrid({ book }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid
-        container
-        sx={{ pt: 2 }}
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
+      <Grid container sx={{ pt: 2 }}>
         {book.paths.map((path) => (
           <BaseCard
             onClick={() =>
