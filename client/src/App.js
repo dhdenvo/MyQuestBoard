@@ -47,10 +47,10 @@ function App() {
               <LibraryState>
                 <AppHeader>
                   <Grid container sx={{ p: "1%", minHeight: "91vh" }}>
-                    <Grid item xs={2} />
+                    <Grid item desktop={2} />
                     <Grid
                       item
-                      xs={8}
+                      desktop={8}
                       sx={{
                         backgroundColor: "backing.main",
                         p: "1%",
@@ -59,7 +59,7 @@ function App() {
                     >
                       <PageRouter />
                     </Grid>
-                    <Grid item xs={2} />
+                    <Grid item desktop={2} />
                   </Grid>
                 </AppHeader>
               </LibraryState>
