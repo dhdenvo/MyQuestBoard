@@ -25,6 +25,16 @@ const theme = createTheme({
       border: "#FFE09E",
     },
   },
+  breakpoints: {
+    values: {
+      // Mobile verticle
+      mobVer: 700,
+      // Mobile horizontal
+      mobHor: 1400,
+      // Desktop
+      desktop: 1920,
+    },
+  },
 });
 
 function App() {
