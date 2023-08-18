@@ -13,7 +13,7 @@ export default function BookPage() {
   }, []);
 
   return (
-    <Grid container>
+    <Grid container sx={{ justifyContent: "center" }}>
       <Grid desktop={12}>
         <Typography variant="h1"> Library </Typography>
       </Grid>
