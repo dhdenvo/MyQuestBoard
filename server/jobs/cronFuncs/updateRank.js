@@ -62,7 +62,7 @@ module.exports = async () => {
 
   // Update all the adventurers to their new ranks
   const updates = rankUpdates.map(({ _id, newRank }) => ({
-    updateOne: { query: { _id }, update: { $set: { rank: newRank } } },
+    updateOne: { filter: { _id }, update: { $set: { rank: newRank } } },
   }));
   await alternateModels.ADVENTURER.bulkWrite(updates);
 
