@@ -15,6 +15,30 @@ const rankSystem = {
   G: {},
 };
 
+const sendCongrats = async ({
+  name,
+  newRank,
+  oldRank,
+  aiContext,
+  discordId,
+}) => {
+  const newRankInd = Object.keys(rankSystem).indexOf(newRank);
+  const oldRankInd = Object.keys(rankSystem).indexOf(oldRank);
+  const genAlters =
+    newRankInd < oldRankInd
+      ? ["congratulate", "promotion", "very exciting"]
+      : ["denounce", "demotion", "apologetic"];
+
+  const generationMessage =
+    `Generate a message to ${genAlters[0]}  adventurer "${name}" on their ${genAlters[1]} ` +
+    `to their new adventurer rank "${newRank}" from their previous rank "${oldRank}". ` +
+    `Make the message approximately 2 sentences and ${genAlters[2]}.`;
+  const message = await generateSingleResponse(generationMessage, aiContext);
+
+  // Send discord message of quest to complete
+  return await sendMessage({ discordId }, message);
+};
+
 module.exports = async () => {
   const adventurers = await alternateModels.ADVENTURER.findMany({});
   const rankUpdates = adventurers
@@ -38,4 +62,7 @@ module.exports = async () => {
     updateOne: { query: { _id }, update: { $set: { rank: newRank } } },
   }));
   await alternateModels.ADVENTURER.bulkWrite(updates);
+
+  // Send discord messages to all adventurers that have ranked up
+  await Promise.all(rankUpdates.map(sendCongrats));
 };
