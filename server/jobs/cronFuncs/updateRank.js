@@ -45,12 +45,15 @@ module.exports = async () => {
     .map(({ _id, name, rank, rankPoints }) => {
       // Get the rank the adventurer should be at (based on promotions)
       const newRank = Object.entries(rankSystem).find(
-        ({ promotion }) => rankPoints > promotion || !promotion
-      );
+        ([_, { promotion }]) => rankPoints >= promotion || !promotion
+      )[0];
       // See if the player should be demoted from current rank
-      const shouldDemote = rankPoints < rankSystem[rank].demotion;
-      if (newRank === rank && !shouldDemote) return;
-      return { _id, name, newRank, prevRank };
+      const shouldChange = !(
+        rankPoints > rankSystem[rank].demotion &&
+        rankPoints < rankSystem[rank].promotion
+      );
+      if (newRank !== rank && shouldChange)
+        return { _id, name, newRank, prevRank: rank };
     })
     .filter((update) => update);
 
