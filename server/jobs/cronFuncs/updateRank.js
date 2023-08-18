@@ -15,24 +15,19 @@ const rankSystem = {
   G: {},
 };
 
-const sendCongrats = async ({
-  name,
-  newRank,
-  oldRank,
-  aiContext,
-  discordId,
-}) => {
+const sendCongrats = async ({ name, newRank, rank, aiContext, discordId }) => {
+  // Determine if the adventurer has been promoted or demoted
   const newRankInd = Object.keys(rankSystem).indexOf(newRank);
-  const oldRankInd = Object.keys(rankSystem).indexOf(oldRank);
+  const oldRankInd = Object.keys(rankSystem).indexOf(rank);
   const genAlters =
     newRankInd < oldRankInd
-      ? ["congratulate", "promotion", "very exciting"]
-      : ["denounce", "demotion", "apologetic"];
+      ? ["congratulate", "promotion", " and very exciting"]
+      : ["apologize to", "demotion", ""];
 
   const generationMessage =
-    `Generate a message to ${genAlters[0]}  adventurer "${name}" on their ${genAlters[1]} ` +
-    `to their new adventurer rank "${newRank}" from their previous rank "${oldRank}". ` +
-    `Make the message approximately 2 sentences and ${genAlters[2]}.`;
+    `Generate a message to ${genAlters[0]} adventurer "${name}" on their ${genAlters[1]} ` +
+    `to their new adventurer rank ${newRank} from their previous rank ${rank}. ` +
+    `Make the message approximately 2 sentences${genAlters[2]}.`;
   const message = await generateSingleResponse(generationMessage, aiContext);
 
   // Send discord message of quest to complete
@@ -42,18 +37,19 @@ const sendCongrats = async ({
 module.exports = async () => {
   const adventurers = await alternateModels.ADVENTURER.findMany({});
   const rankUpdates = adventurers
-    .map(({ _id, name, rank, rankPoints }) => {
+    .map((adventurer) => {
+      const { rank, rankPoints } = adventurer;
       // Get the rank the adventurer should be at (based on promotions)
       const newRank = Object.entries(rankSystem).find(
         ([_, { promotion }]) => rankPoints >= promotion || !promotion
       )[0];
-      // See if the player should be demoted from current rank
+      // See if the player should be changed from current rank
       const shouldChange = !(
         rankPoints > rankSystem[rank].demotion &&
         rankPoints < rankSystem[rank].promotion
       );
       if (newRank !== rank && shouldChange)
-        return { _id, name, newRank, prevRank: rank };
+        return { newRank, ...adventurer.toObject() };
     })
     .filter((update) => update);
 
