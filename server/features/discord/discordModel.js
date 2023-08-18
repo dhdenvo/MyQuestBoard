@@ -4,6 +4,7 @@ const { discordConnProm } = require("../../global/globalConnections");
 const sendMessage = async (adventurer, message) => {
   const client = await discordConnProm;
   const { discordId } = adventurer;
+  if (!discordId) return;
   const discUser = await client.users.fetch(discordId);
   return await discUser.send(message);
 };
