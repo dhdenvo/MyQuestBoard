@@ -19,6 +19,7 @@ class ModelTemplate {
   createOne = (doc) => this.dbModel.create(doc);
   createMany = (docs) => this.dbModel.insertMany(docs);
   updateOne = (query, updateDoc) => this.dbModel.updateOne(query, updateDoc);
+  bulkWrite = (operations) => this.dbModel.bulkWrite(operations);
 
   aggregate = (pipeline = [], autoPopulate = false) => {
     const agg = this.dbModel.aggregate(pipeline);
