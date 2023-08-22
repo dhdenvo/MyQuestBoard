@@ -8,19 +8,22 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 export default function BaseCard({ doc, imageGetter, onClick, children }) {
   let card = (
     <CardContent>
-      {doc?.hasImage ? (
+      {doc?.hasImage == null ? (
+        <></>
+      ) : (
         <Box
           component="img"
-          src={imageGetter(doc) || ""}
+          src={
+            doc?.hasImage ? imageGetter(doc) : imageGetter({ _id: "DEFAULT" })
+          }
           sx={{
             width: "100%",
             minHeight: "224px",
             border: 2,
+            mb: 1,
           }}
           alt={doc.title}
         />
-      ) : (
-        <></>
       )}
       {children}
     </CardContent>

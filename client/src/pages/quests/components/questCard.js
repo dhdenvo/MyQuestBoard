@@ -29,6 +29,7 @@ export default function QuestCard({ quest }) {
             size="small"
             variant="contained"
             onClick={() => completeQuest(quest._id)}
+            sx={{ mt: -1, mb: -3 }}
           >
             Complete quest
           </Button>
