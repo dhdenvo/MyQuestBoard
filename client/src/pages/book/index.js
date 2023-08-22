@@ -73,7 +73,7 @@ export default function BookPage() {
             <Grid item xs={2}>
               {viewOriginalButton}
             </Grid>
-            <Grid item xs={12} sx={{ p: 2 }}>
+            <Grid item xs={12} sx={{ ml: -1 }}>
               <PathGrid book={book} />
             </Grid>
           </Fragment>
