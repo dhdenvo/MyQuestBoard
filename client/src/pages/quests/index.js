@@ -12,5 +12,18 @@ export default function QuestPage() {
     // eslint-disable-next-line
   }, []);
 
-  return <QuestGrid quests={quests} />;
+  return (
+    <Grid container sx={{ pt: 2 }}>
+      <Grid item xs={12}>
+        <Typography variant="h1">Quest Board</Typography>
+      </Grid>
+      <Grid item container xs={12} sx={{ pt: 2 }}>
+        {quests.map((quest) => (
+          <Grid item xs={3}>
+            <QuestCard quest={quest} key={quest._id} />
+          </Grid>
+        ))}
+      </Grid>
+    </Grid>
+  );
 }
