@@ -66,6 +66,7 @@ const getQuests = ({ adventurer }) => {
         },
       },
     },
+    { $sort: { isComplete: 1, dueDate: 1, title: 1 } },
   ];
   return model.aggregate(pipeline);
 };
