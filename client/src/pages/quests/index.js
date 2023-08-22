@@ -19,8 +19,8 @@ export default function QuestPage() {
       </Grid>
       <Grid item container xs={12} sx={{ pt: 2 }}>
         {quests.map((quest) => (
-          <Grid item xs={3}>
-            <QuestCard quest={quest} key={quest._id} />
+          <Grid item xs={3} key={quest._id}>
+            <QuestCard quest={quest} />
           </Grid>
         ))}
       </Grid>

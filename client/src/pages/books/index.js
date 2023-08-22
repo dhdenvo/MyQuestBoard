@@ -14,13 +14,13 @@ export default function BookPage() {
 
   return (
     <Grid container>
-      <Grid xs={12}>
+      <Grid item xs={12}>
         <Typography variant="h1"> Library </Typography>
       </Grid>
       <Grid container item xs={12} sx={{ justifyContent: "center" }}>
         {(books || []).map((book) => (
-          <Grid item xs={3}>
-            <BookCard book={book} key={book._id} />
+          <Grid item xs={3} key={book._id}>
+            <BookCard book={book} />
           </Grid>
         ))}
       </Grid>

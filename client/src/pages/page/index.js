@@ -14,7 +14,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import SavedSearchIcon from "@mui/icons-material/SavedSearch";
 
-export default function BookPage() {
+export default function PagePage() {
   const libraryContext = useContext(LibraryContext);
   const { page, retrievePage, removePath, savePath, searchForPage } =
     libraryContext;
@@ -98,7 +98,7 @@ export default function BookPage() {
       <Grid item xs={1} />
       <Grid container item xs={4}>
         {(page?.nextPages || []).map((nextPage) => (
-          <Grid item xs={12} sx={{ p: 0.5 }}>
+          <Grid item xs={12} sx={{ p: 0.5 }} key={nextPage._id}>
             <PageButton page={nextPage} isForward path={pathId} />
           </Grid>
         ))}

@@ -21,7 +21,7 @@ export default function AppHeader({ children }) {
         <Toolbar>
           <Grid container>
             {pages.map(({ name, path, logo }) => (
-              <Grid item xs={12 / pages.length}>
+              <Grid item xs={12 / pages.length} key={name}>
                 <Button
                   key={name}
                   disabled={window.location.href.endsWith(path)}
