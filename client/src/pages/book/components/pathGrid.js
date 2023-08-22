@@ -1,9 +1,15 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import BaseCard from "../../../components/baseCard";
-import { Typography } from "@mui/material";
+import { Button, CardActions, Typography } from "@mui/material";
+import { useContext } from "react";
+import LibraryContext from "../../../context/library/libraryContext";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function PathGrid({ book }) {
+  const libraryContext = useContext(LibraryContext);
+  const { removePath } = libraryContext;
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container sx={{ pt: 0 }}>
@@ -23,6 +29,16 @@ export default function PathGrid({ book }) {
                   path.content.slice(0, 150).lastIndexOf(" ")
                 ) + "..."}
               </Typography>
+              <CardActions sx={{ justifyContent: "center" }}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={() => removePath(path)}
+                  sx={{ mb: -3, textTransform: "none" }}
+                >
+                  <DeleteForeverIcon /> Remove path
+                </Button>
+              </CardActions>
             </BaseCard>
           </Grid>
         ))}

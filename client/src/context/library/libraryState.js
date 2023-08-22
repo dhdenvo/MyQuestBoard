@@ -52,7 +52,7 @@ export default function LibraryState(props) {
   };
   // Remove a path from a book
   const removePath = ({ _id, book }) => {
-    axios.delete(`/api/library/book/${book._id}/page/${_id}/path`);
+    axios.delete(`/api/library/book/${book._id || book}/page/${_id}/path`);
     const newPage = { ...state.page, pathSaved: false };
     dispatch({ appliesTo: "page", data: newPage });
   };
