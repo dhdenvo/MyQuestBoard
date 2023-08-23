@@ -2,9 +2,9 @@
   "name": "myquestboard",
   "version": "1.0.0",
   "description": "Personal website for daily activities, progress tracking, and other personal tools.",
-  "main": "server/app.js",
+  "main": "app.js",
   "scripts": {
-    "server": "nodemon --watch server server/app.js"
+    "server": "nodemon --watch server app.js"
   },
   "repository": {
     "type": "git",
