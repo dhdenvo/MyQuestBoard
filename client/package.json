@@ -4,6 +4,7 @@
   "private": true,
   "description": "The front-end for my personal website for daily activities, progress tracking, and other personal tools.",
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
@@ -20,9 +21,6 @@
     "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
   },
   "scripts": {
     "start": "react-scripts start",
