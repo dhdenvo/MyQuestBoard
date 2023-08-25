@@ -1,3 +1,4 @@
+const { completeQuest } = require("../completion/completionController");
 const { generateSingleResponse } = require("../shared/helpers/aiHelper");
 const alternateModels = require("../shared/helpers/alternateModels");
 const model = require("./discordModel");
@@ -26,8 +27,16 @@ const directMessageHandler = async (message) => {
   await model.sendMessage(adventurer, response);
 };
 
-const reactionAddHandler = (message) => {
-  console.log("HIIIIIII", message);
+const reactionAddHandler = async (reaction, user) => {
+  // Get the adventurer that reacted
+  const adventurer = await alternateModels.ADVENTURER.findOne({
+    discordId: user?.id,
+  });
+
+  // Complete the quest for the adventurer
+  await completeQuest({ adventurer, params: { questId: "Shrug" } });
+  // React on the message to tell the adventurer they are complete
+  await reaction?.message?.react("✅");
 };
 
 model.handleDirectMessage(directMessageHandler);

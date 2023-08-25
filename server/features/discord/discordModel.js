@@ -23,7 +23,7 @@ const handleReactionAdd = async (func) => {
   const client = await discordConnProm;
   client.on("messageReactionAdd", async (reaction, user) => {
     if (user?.bot || reaction?.message?.guildId) return;
-    func(reaction);
+    func(reaction, user);
   });
 };
 
