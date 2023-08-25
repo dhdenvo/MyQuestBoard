@@ -23,7 +23,17 @@ const sendReminder = async (quest) => {
   message += `[⠀](${process.env.GUILD_ADDRESS}/quest/${quest._id})`;
 
   // Send discord message of quest to complete
-  return await sendMessage(quest.adventurer, message);
+  const messageProm = sendMessage(quest.adventurer, message);
+
+  // Generate an emoji to react to the message on
+  const emojiMessage =
+    `Generate a single emoji for "${quest.title}".` +
+    "Do not include anything else in the message";
+  const emojiProm = await generateSingleResponse(emojiMessage);
+
+  // Send the message and generate the emoji
+  const [sentMessage, emoji] = await Promise.all([messageProm, emojiProm]);
+  await sentMessage.react(emoji);
 };
 
 module.exports = async () => {
