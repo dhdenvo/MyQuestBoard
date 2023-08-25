@@ -18,7 +18,17 @@ const handleDirectMessage = async (func) => {
   });
 };
 
+// Handle direct messages using a given function
+const handleReactionAdd = async (func) => {
+  const client = await discordConnProm;
+  client.on("messageReactionAdd", async (reaction, user) => {
+    if (user?.bot || reaction?.message?.guildId) return;
+    func(reaction, user);
+  });
+};
+
 module.exports = {
   sendMessage,
   handleDirectMessage,
+  handleReactionAdd,
 };

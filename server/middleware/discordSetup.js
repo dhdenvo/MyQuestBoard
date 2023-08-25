@@ -3,7 +3,11 @@ const { discordSetConn } = require("../global/globalConnections");
 
 // Create a new client instance
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.DirectMessageReactions,
+  ],
   partials: [Partials.Channel],
 });
 
