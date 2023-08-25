@@ -14,7 +14,8 @@ const generateSingleResponse = async (message, systemContext) => {
     model: process.env.OPENAI_MODEL,
     messages,
   });
-  return chatCompletion.data.choices[0].message;
+  const response = chatCompletion.data.choices[0].message;
+  return response?.content || response;
 };
 
 // Generate an ai image url from a link
