@@ -33,8 +33,18 @@ const reactionAddHandler = async (reaction, user) => {
     discordId: user?.id,
   });
 
+  // Use regex to search for the quest id in the message
+  const message = reaction?.message?.content;
+  if (!message) return;
+  const messageQuery = message.match(
+    new RegExp(
+      `\\(${process.env.GUILD_ADDRESS.replace("/", "\\/")}\\/quest\\/(.*)\\)`
+    )
+  );
+  if (!messageQuery?.length) return;
+
   // Complete the quest for the adventurer
-  await completeQuest({ adventurer, params: { questId: "Shrug" } });
+  await completeQuest({ adventurer, params: { questId: messageQuery[1] } });
   // React on the message to tell the adventurer they are complete
   await reaction?.message?.react("✅");
 };
