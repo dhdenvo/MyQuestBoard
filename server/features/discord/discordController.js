@@ -26,7 +26,12 @@ const directMessageHandler = async (message) => {
   await model.sendMessage(adventurer, response);
 };
 
+const reactionAddHandler = (message) => {
+  console.log("HIIIIIII", message);
+};
+
 model.handleDirectMessage(directMessageHandler);
+model.handleReactionAdd(reactionAddHandler);
 module.exports = {
   sendRouteMessage,
 };
