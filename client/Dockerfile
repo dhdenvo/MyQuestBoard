@@ -1,8 +1,13 @@
-FROM node:20
+FROM node:20 as client-builder
 
 WORKDIR /client-app
 COPY package.json ./
-RUN npm install --production
+RUN npm install
 COPY . .
-EXPOSE 3000
-CMD react-scripts start
+RUN npm run build
+
+FROM nginx:alpine
+
+COPY --from=client-builder /client-app/build /usr/share/nginx/html
+EXPOSE 80
+CMD nginx -g "daemon off;"
