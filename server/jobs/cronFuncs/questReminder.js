@@ -82,5 +82,5 @@ module.exports = async () => {
   if (!reminderQuests.length) return;
 
   // Send reminders for every quest that needs reminding
-  return await Promise.all(reminderQuests.map(sendReminder));
+  for (quest of reminderQuests) await sendReminder(quest);
 };
