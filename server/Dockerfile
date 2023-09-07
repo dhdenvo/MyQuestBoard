@@ -1,5 +1,6 @@
 FROM node:20
 
+ENV TZ=America/Toronto
 # At the moment doesn't affect anything
 ENV NODE_ENV=production
 
