@@ -40,7 +40,9 @@ module.exports = async () => {
   const time = format(new Date(), "HH:mm", {
     timeZone: "America/Toronto",
   });
-  const date = format(new Date(), "yyyy-DDDD");
+  const date = format(new Date(), "yyyy-DDDD", {
+    timeZone: "America/Toronto",
+  });
 
   // Get all quests that are to be reminded on
   const reminderQuests = await alternateModels.QUEST.findMany({
