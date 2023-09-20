@@ -1,10 +1,15 @@
 const { FREQUENCY_TYPES } = require("../configs/questConfig.json");
 const alternateModels = require("./alternateModels");
+const { differenceInDays } = require("date-fns");
 
 // Auto increase a date until it passes the current date
 const autoIncFunc = (func, date) => {
   const newDate = func(date, 1);
-  if (newDate > new Date()) return newDate;
+  if (
+    differenceInDays(newDate, new Date(0)) >=
+    differenceInDays(new Date(), new Date(0))
+  )
+    return newDate;
   return autoIncFunc(func, newDate);
 };
 // Specific changes to a quest when the quest is completed
