@@ -5,35 +5,49 @@ const {
   generateSingleResponse,
 } = require("../../features/shared/helpers/aiHelper");
 
-const sendReminder = async (quest) => {
-  const formatDate = (date) => format(date, "MMM d, yyy");
-  const generationMessage = `Generating a message reminding me on "${
-    quest.title
-  }". It is about ${quest.description}. This is due on ${formatDate(
-    quest.dueDate
-  )} and it is currently ${formatDate(
-    new Date()
-  )}. Make the message approximately 2 sentences and try to include emojis.`;
-
-  let message = await generateSingleResponse(
-    generationMessage,
-    quest.adventurer.aiContext
-  );
-  // Add an invisible character with a link to the quest
-  message += `[⠀](${process.env.GUILD_ADDRESS}/quest/${quest._id})`;
-
-  // Send discord message of quest to complete
-  const messageProm = sendMessage(quest.adventurer, message);
+const sendReminder = async (quests) => {
+  const adventurer = quests[0].adventurer;
 
   // Generate an emoji to react to the message on
   const emojiMessage =
-    `Generate a single emoji for "${quest.title}".` +
-    "Do not include anything else in the message";
-  const emojiProm = await generateSingleResponse(emojiMessage);
+    `Generate a single unique Standard Unicode emoji for each description (${adventurer.aiContext}). Separate them by new lines (\n) and do not include anything else in the message.\n` +
+    quests
+      .map(({ title, description }) => `${title} (${description})`)
+      .join("\n");
+  let emojis = await generateSingleResponse(emojiMessage);
+  // Extract the emojis from each line, removing all non emojis
+  emojis = emojis
+    .split("\n")
+    .map((txt) => [...txt.replace(/\P{Extended_Pictographic}/u, "")].pop(-1));
 
-  // Send the message and generate the emoji
-  const [sentMessage, emoji] = await Promise.all([messageProm, emojiProm]);
-  await sentMessage.react(emoji);
+  // Generate a custom message for the reminder
+  let generationMessage = "Generate a message reminding me on ";
+  if (quests.length === 1)
+    generationMessage += `${quests[0].title}, it is about ${quests[0].description}. `;
+  else
+    generationMessage += `${quests.length} things. The reminders are on ${quests
+      .map(({ title, description }) => `${title} (about ${description})`)
+      .join(", ")}. `;
+  generationMessage +=
+    "Make the message approximately 2 sentences and include emojis.";
+
+  let message = await generateSingleResponse(
+    generationMessage,
+    adventurer.aiContext
+  );
+
+  const linkMsg = quests
+    .map(({ _id }) => `[⠀](${process.env.GUILD_ADDRESS}/quest/${_id})`)
+    .join("");
+  message += emojis.reverse().join("") + linkMsg;
+
+  // Send discord message of quest to complete
+  const sentMessage = await sendMessage(adventurer, message);
+  // Add the emojis
+  for (emoji of emojis) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await sentMessage.react(emoji);
+  }
 };
 
 module.exports = async () => {
@@ -83,6 +97,10 @@ module.exports = async () => {
   }).populate("adventurer");
   if (!reminderQuests.length) return;
 
+  const groupedQuests = reminderQuests.reduce((g, quest) => {
+    (g[quest.adventurer.id] = g[quest.adventurer.id] || []).push(quest);
+    return g;
+  }, {});
   // Send reminders for every quest that needs reminding
-  for (quest of reminderQuests) await sendReminder(quest);
+  for (quest of Object.values(groupedQuests)) await sendReminder(quest);
 };
