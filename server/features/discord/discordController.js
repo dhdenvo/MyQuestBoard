@@ -1,6 +1,7 @@
 const { completeQuest } = require("../completion/completionController");
 const { generateSingleResponse } = require("../shared/helpers/aiHelper");
 const alternateModels = require("../shared/helpers/alternateModels");
+const { searchStr } = require("../shared/helpers/genericHelper");
 const model = require("./discordModel");
 
 // Send a generic discord message to the authenticated user
@@ -33,20 +34,24 @@ const reactionAddHandler = async (reaction, user) => {
     discordId: user?.id,
   });
 
+  const emoji = reaction?._emoji.name;
   // Use regex to search for the quest id in the message
   const message = reaction?.message?.content;
   if (!message) return;
-  const messageQuery = message.match(
-    new RegExp(
-      `\\(${process.env.GUILD_ADDRESS.replace("/", "\\/")}\\/quest\\/(.*)\\)`
-    )
+  const messageQuery = searchStr(
+    message,
+    `${process.env.GUILD_ADDRESS}/quest/`,
+    24
   );
   if (!messageQuery?.length) return;
+  // Reverse the message to grab the emojis from the back
+  const emojiOptions = [...message.slice(0, message.indexOf("[⠀]"))]
+    .reverse()
+    .slice(0, messageQuery.length);
+  const questId = messageQuery[emojiOptions.indexOf(emoji)];
 
   // Complete the quest for the adventurer
-  await completeQuest({ adventurer, params: { questId: messageQuery[1] } });
-  // React on the message to tell the adventurer they are complete
-  await reaction?.message?.react("✅");
+  await completeQuest({ adventurer, params: { questId } });
 };
 
 model.handleDirectMessage(directMessageHandler);
