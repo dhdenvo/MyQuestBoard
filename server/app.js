@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { join } = require("path");
 
 require("./middleware/mongoSetup");
 require("./middleware/discordSetup");
@@ -22,6 +23,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize({ userProperty: "adventurer" }));
 app.use(passport.session());
+
+app.use(express.static(join(__dirname, "/build")));
+app.get("/", (req, res) => {
+  res.sendFile(join(__dirname, "/build/index.html"));
+});
 
 require("./middleware/auth")(router);
 app.use("/api", router);
