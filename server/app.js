@@ -24,11 +24,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize({ userProperty: "adventurer" }));
 app.use(passport.session());
 
-app.use(express.static(join(__dirname, "/build")));
-app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "/build/index.html"));
-});
-
 require("./middleware/auth")(router);
 app.use("/api", router);
 require("./jobs/cronHandler");
@@ -36,4 +31,9 @@ require("./jobs/cronHandler");
 app.listen(process.env.PORT, (err) => {
   if (err) console.error("Unable to start server:", err);
   console.log("Server started on port", process.env.PORT);
+});
+
+app.use(express.static(join(__dirname, "/build")));
+app.get("/*", (req, res) => {
+  res.sendFile(join(__dirname, "/build/index.html"));
 });
