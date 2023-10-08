@@ -8,6 +8,9 @@ RUN npm run build
 
 FROM node:20 as server
 
+ENV TZ=America/Toronto
+ENV NODE_ENV=production
+
 WORKDIR /server-app
 COPY server/package.json .
 RUN npm install
