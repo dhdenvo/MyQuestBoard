@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { join } = require("path");
 
 require("./middleware/mongoSetup");
 require("./middleware/discordSetup");
@@ -30,4 +31,9 @@ require("./jobs/cronHandler");
 app.listen(process.env.PORT, (err) => {
   if (err) console.error("Unable to start server:", err);
   console.log("Server started on port", process.env.PORT);
+});
+
+app.use(express.static(join(__dirname, "/build")));
+app.get("/*", (req, res) => {
+  res.sendFile(join(__dirname, "/build/index.html"));
 });
