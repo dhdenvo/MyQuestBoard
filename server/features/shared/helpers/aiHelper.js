@@ -1,5 +1,18 @@
 const { openAIConn } = require("../../../global/globalConnections");
 
+// Generate a test response from a series of messages
+const generateConversationResponse = (context, conversation) => {
+  const messages = [
+    context.map((content) => ({ role: "system", content })),
+    // Assume that messages go back and forth between user & assistant
+    conversation.map((content, i) => ({
+      role: i ? "user" : "assistant",
+      content,
+    })),
+  ].flat();
+  return generateResponse(messages);
+};
+
 // Generate a text response from a single message
 const generateSingleResponse = (message, systemContext) => {
   const messages = [];
@@ -34,7 +47,7 @@ const generateAiImage = async (prompt) => {
 };
 
 module.exports = {
-  generateCompoundResponse,
+  generateConversationResponse,
   generateSingleResponse,
   generateAiImage,
 };
