@@ -1,8 +1,12 @@
 const { completeQuest } = require("../completion/completionController");
-const { generateSingleResponse } = require("../shared/helpers/aiHelper");
+const {
+  generateConversationResponse,
+  generateSingleResponse,
+} = require("../shared/helpers/aiHelper");
 const alternateModels = require("../shared/helpers/alternateModels");
 const { searchStr } = require("../shared/helpers/genericHelper");
 const model = require("./discordModel");
+const { RESPONSE_CONTEXTS } = require("./discordConfig.json");
 
 // Send a generic discord message to the authenticated user
 const sendRouteMessage = async ({ adventurer, body }) => {
@@ -20,12 +24,25 @@ const directMessageHandler = async (message) => {
   });
   // If the discord user isn't an adventurer, ignore them
   if (!adventurer) return;
+  const context = adventurer.aiContext
+    ? [adventurer.aiContext, ...RESPONSE_CONTEXTS]
+    : RESPONSE_CONTEXTS;
+  const conversation = adventurer.aiConversation.map(({ message }) => message);
+  conversation.push(message.content);
   // Generate the message using ai & respond to them
-  const response = await generateSingleResponse(
-    message.content,
-    adventurer.aiContext
+  const genMessage = await generateConversationResponse(context, conversation);
+  const sendDiscProm = model.sendMessage(adventurer, genMessage);
+  const updateAdvenProm = alternateModels.ADVENTURER.updateOne(
+    { _id: adventurer._id },
+    {
+      $push: {
+        aiConversation: {
+          $each: [{ message: message.content }, { message: genMessage }],
+        },
+      },
+    }
   );
-  await model.sendMessage(adventurer, response);
+  await Promise.all([sendDiscProm, updateAdvenProm]);
 };
 
 const reactionAddHandler = async (reaction, user) => {
