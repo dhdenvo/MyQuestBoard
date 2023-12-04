@@ -4,8 +4,9 @@ const { COLLECTION_NAMES } = require("../../global/config.json");
 
 const conversationSchema = Schema(
   {
-    message: { type: String, required: true },
-    saidOn: { type: Date, default: Date.now },
+    content: { type: String, required: true },
+    role: { type: String, required: true },
+    sentOn: { type: Date, default: Date.now },
   },
   { versionKey: false, _id: false }
 );

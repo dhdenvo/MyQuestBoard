@@ -2,14 +2,11 @@ const { openAIConn } = require("../../../global/globalConnections");
 
 // Generate a test response from a series of messages
 const generateConversationResponse = (context, conversation) => {
+  // Combine the context & conversation and ensure there aren't extra properties
   const messages = [
-    context.map((content) => ({ role: "system", content })),
-    // Assume that messages go back and forth between user & assistant
-    conversation.map((content, i) => ({
-      role: i ? "user" : "assistant",
-      content,
-    })),
-  ].flat();
+    ...context.map((content) => ({ role: "system", content })),
+    ...conversation,
+  ].map(({ role, content }) => ({ role, content }));
   return generateResponse(messages);
 };
 

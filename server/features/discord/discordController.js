@@ -27,8 +27,9 @@ const directMessageHandler = async (message) => {
   const context = adventurer.aiContext
     ? [adventurer.aiContext, ...RESPONSE_CONTEXTS]
     : RESPONSE_CONTEXTS;
-  const conversation = adventurer.aiConversation.map(({ message }) => message);
-  conversation.push(message.content);
+  const conversation = adventurer.aiConversation;
+  const userMessage = { content: message.content, role: "user" };
+  conversation.push(userMessage);
   // Generate the message using ai & respond to them
   const genMessage = await generateConversationResponse(context, conversation);
   const sendDiscProm = model.sendMessage(adventurer, genMessage);
@@ -37,7 +38,7 @@ const directMessageHandler = async (message) => {
     {
       $push: {
         aiConversation: {
-          $each: [{ message: message.content }, { message: genMessage }],
+          $each: [userMessage, { content: genMessage, role: "assistant" }],
         },
       },
     }
