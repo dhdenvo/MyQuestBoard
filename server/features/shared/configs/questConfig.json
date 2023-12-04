@@ -4,6 +4,8 @@
     "WEEKLY": "weekly",
     "MONTHLY": "monthly",
     "YEARLY": "yearly",
-    "ONCE": "once"
+    "ONCE": "once",
+    "WEEKEND": "weekend",
+    "WEEKDAY": "weekday"
   }
 }
