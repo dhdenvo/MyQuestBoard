@@ -1,8 +1,7 @@
 const { openAIConn } = require("../../../global/globalConnections");
 
 // Generate a text response from a single message
-const generateSingleResponse = async (message, systemContext) => {
-  const openai = openAIConn();
+const generateSingleResponse = (message, systemContext) => {
   const messages = [];
   if (systemContext)
     messages.push({
@@ -10,6 +9,11 @@ const generateSingleResponse = async (message, systemContext) => {
       content: systemContext,
     });
   messages.push({ role: "user", content: message });
+  return generateResponse(messages);
+};
+
+const generateResponse = async (messages) => {
+  const openai = openAIConn();
   const chatCompletion = await openai.createChatCompletion({
     model: process.env.OPENAI_MODEL,
     messages,
@@ -30,6 +34,7 @@ const generateAiImage = async (prompt) => {
 };
 
 module.exports = {
+  generateCompoundResponse,
   generateSingleResponse,
   generateAiImage,
 };
