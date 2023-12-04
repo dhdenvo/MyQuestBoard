@@ -4,7 +4,7 @@
   "description": "Personal website for daily activities, progress tracking, and other personal tools.",
   "main": "app.js",
   "scripts": {
-    "server": "nodemon --watch server app.js"
+    "server": "nodemon app.js"
   },
   "repository": {
     "type": "git",
