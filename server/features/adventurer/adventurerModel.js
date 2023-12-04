@@ -2,6 +2,14 @@ const { Schema } = require("mongoose");
 const ModelTemplate = require("../shared/ModelTemplate");
 const { COLLECTION_NAMES } = require("../../global/config.json");
 
+const conversationSchema = Schema(
+  {
+    message: { type: String, required: true },
+    saidOn: { type: Date, default: Date.now },
+  },
+  { versionKey: false, _id: false }
+);
+
 const adventurerSchema = Schema(
   {
     name: { type: String, required: true },
@@ -9,6 +17,7 @@ const adventurerSchema = Schema(
     rank: String,
     discordId: String,
     aiContext: String,
+    aiConversation: { type: [conversationSchema], default: [] },
     hasImage: { type: Boolean, default: false },
   },
   { versionKey: false }
