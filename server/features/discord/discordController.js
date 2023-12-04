@@ -7,6 +7,7 @@ const alternateModels = require("../shared/helpers/alternateModels");
 const { searchStr } = require("../shared/helpers/genericHelper");
 const model = require("./discordModel");
 const { RESPONSE_CONTEXTS } = require("./discordConfig.json");
+const { COMPLETION_ROLES } = require("../shared/configs/aiConfig.json");
 
 // Send a generic discord message to the authenticated user
 const sendRouteMessage = async ({ adventurer, body }) => {
@@ -28,20 +29,17 @@ const directMessageHandler = async (message) => {
     ? [adventurer.aiContext, ...RESPONSE_CONTEXTS]
     : RESPONSE_CONTEXTS;
   const conversation = adventurer.aiConversation;
-  const userMessage = { content: message.content, role: "user" };
-  conversation.push(userMessage);
+  const userMsg = { content: message.content, role: COMPLETION_ROLES.USER };
+  conversation.push(userMsg);
   // Generate the message using ai & respond to them
   const genMessage = await generateConversationResponse(context, conversation);
+  // Send the assistant's discord message
   const sendDiscProm = model.sendMessage(adventurer, genMessage);
+  // Update the player's conversation transcript
+  const assistMsg = { content: genMessage, role: COMPLETION_ROLES.ASSISTANT };
   const updateAdvenProm = alternateModels.ADVENTURER.updateOne(
     { _id: adventurer._id },
-    {
-      $push: {
-        aiConversation: {
-          $each: [userMessage, { content: genMessage, role: "assistant" }],
-        },
-      },
-    }
+    { $push: { aiConversation: { $each: [userMsg, assistMsg] } } }
   );
   await Promise.all([sendDiscProm, updateAdvenProm]);
 };

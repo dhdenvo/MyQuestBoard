@@ -1,10 +1,11 @@
 const { openAIConn } = require("../../../global/globalConnections");
+const { COMPLETION_ROLES } = require("../configs/aiConfig.json");
 
 // Generate a test response from a series of messages
 const generateConversationResponse = (context, conversation) => {
   // Combine the context & conversation and ensure there aren't extra properties
   const messages = [
-    ...context.map((content) => ({ role: "system", content })),
+    ...context.map((content) => ({ role: COMPLETION_ROLES.SYSTEM, content })),
     ...conversation,
   ].map(({ role, content }) => ({ role, content }));
   return generateResponse(messages);
@@ -15,10 +16,10 @@ const generateSingleResponse = (message, systemContext) => {
   const messages = [];
   if (systemContext)
     messages.push({
-      role: "system",
+      role: COMPLETION_ROLES.SYSTEM,
       content: systemContext,
     });
-  messages.push({ role: "user", content: message });
+  messages.push({ role: COMPLETION_ROLES.USER, content: message });
   return generateResponse(messages);
 };
 
