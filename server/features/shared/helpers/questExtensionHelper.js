@@ -14,7 +14,7 @@ const autoIncFunc = (func, date, condFunc = () => true) => {
   return autoIncFunc(func, newDate, condFunc);
 };
 // Specific changes to a quest when the quest is completed
-const questExtensionChanges = ({ frequency, dueDate }, isFailure) => {
+const questExtensionChanges = ({ frequency, dueDate, endDate }, isFailure) => {
   const changes = {
     [FREQUENCY_TYPES.DAILY]: { dueDate: require("date-fns").addDays },
     [FREQUENCY_TYPES.WEEKLY]: { dueDate: require("date-fns").addWeeks },
@@ -39,8 +39,14 @@ const questExtensionChanges = ({ frequency, dueDate }, isFailure) => {
       dueDate: (date) => require("date-fns").addDays(date, parseInt(frequency)),
     };
   // If increasing the due date, ensure the new due date is after now
-  if (change?.dueDate)
+  if (change?.dueDate) {
     change.dueDate = autoIncFunc(change.dueDate, dueDate, change.condFunc);
+    // If the new due date is after the end date, don't update the due date & complete quest
+    if (endDate && change.dueDate >= endDate) {
+      delete change.dueDate;
+      change.isComplete = true;
+    }
+  }
   return change;
 };
 

@@ -21,6 +21,7 @@ const questSchema = Schema(
       enum: Object.values(FREQUENCY_TYPES),
     },
     dueDate: { type: Date, required: true },
+    endDate: { type: Date, default: null },
     validUntil: {
       type: Number,
       default: function () {
