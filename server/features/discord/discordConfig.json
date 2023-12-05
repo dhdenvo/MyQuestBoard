@@ -5,7 +5,7 @@
       "id": "CLEAR",
       "condition": "the message says to clear the conversation",
       "response": "our conversation has been cleared",
-      "func": "clearConversation"
+      "afterFunc": "clearConversation"
     }
   ]
 }

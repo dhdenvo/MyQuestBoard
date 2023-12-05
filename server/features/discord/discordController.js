@@ -15,7 +15,11 @@ const CONTEXT_IDS = [];
 const CONTEXT_STRS = RESPONSE_CONTEXTS.map((cont) => {
   if (typeof cont === typeof "") return cont;
   CONTEXT_IDS.push(cont.id);
-  CONTEXT_FUNCS[cont.id] = require(`./messageHandlers/${cont.func}.js`);
+  CONTEXT_FUNCS[cont.id] = {
+    before:
+      cont.beforeFunc && require(`./messageHandlers/${cont.beforeFunc}.js`),
+    after: cont.afterFunc && require(`./messageHandlers/${cont.afterFunc}.js`),
+  };
   return `If ${cont.condition} then have the response start with "${cont.id}" and generate a response about "${cont.response}"`;
 });
 
@@ -43,21 +47,29 @@ const directMessageHandler = async (message) => {
   conversation.push(userMsg);
   // Generate the message using ai & respond to them
   let genMessage = await generateConversationResponse(context, conversation);
+  const assistMsg = { content: genMessage, role: COMPLETION_ROLES.ASSISTANT };
 
   // See if a context function was called
   const matchedId = CONTEXT_IDS.find((id) => genMessage.startsWith(id));
+  const contextFuncs = CONTEXT_FUNCS[matchedId];
+  // Remove the context id from the generated message
   if (matchedId) genMessage = genMessage.replace(matchedId, "").trim();
+  // Run the context before function and update the gen message with it
+  if (contextFuncs?.before)
+    genMessage = await contextFuncs.before(adventurer, message, genMessage);
 
   // Send the assistant's discord message
   const sendDiscProm = model.sendMessage(adventurer, genMessage);
   // Update the player's conversation transcript
-  const assistMsg = { content: genMessage, role: COMPLETION_ROLES.ASSISTANT };
   const updateAdvenProm = alternateModels.ADVENTURER.updateOne(
     { _id: adventurer._id },
     { $push: { aiConversation: { $each: [userMsg, assistMsg] } } }
   );
   await Promise.all([sendDiscProm, updateAdvenProm]);
-  if (matchedId) await CONTEXT_FUNCS[matchedId](adventurer, message);
+
+  // Run the context after function
+  if (contextFuncs?.after)
+    await contextFuncs.after(adventurer, message, genMessage);
 };
 
 const reactionAddHandler = async (reaction, user) => {
