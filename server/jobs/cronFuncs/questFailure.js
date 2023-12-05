@@ -25,7 +25,7 @@ module.exports = async () => {
     failedQuests.map((quest) => ({
       adventurer: quest.adventurer,
       quest: quest._id,
-      rankPoints: quest.rankPoints,
+      rankPoints: -quest.rankPoints,
       isFailure: true,
     }))
   );
