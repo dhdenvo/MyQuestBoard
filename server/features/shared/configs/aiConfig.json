@@ -1,0 +1,7 @@
+{
+  "COMPLETION_ROLES": {
+    "USER": "user",
+    "ASSISTANT": "assistant",
+    "SYSTEM": "system"
+  }
+}

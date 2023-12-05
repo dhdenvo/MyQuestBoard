@@ -1,8 +1,27 @@
 const { completeQuest } = require("../completion/completionController");
-const { generateSingleResponse } = require("../shared/helpers/aiHelper");
+const {
+  generateConversationResponse,
+  generateSingleResponse,
+} = require("../shared/helpers/aiHelper");
 const alternateModels = require("../shared/helpers/alternateModels");
 const { searchStr } = require("../shared/helpers/genericHelper");
 const model = require("./discordModel");
+const { RESPONSE_CONTEXTS } = require("./discordConfig.json");
+const { COMPLETION_ROLES } = require("../shared/configs/aiConfig.json");
+
+// Create the constants required for the context feature
+const CONTEXT_FUNCS = {};
+const CONTEXT_IDS = [];
+const CONTEXT_STRS = RESPONSE_CONTEXTS.map((cont) => {
+  if (typeof cont === typeof "") return cont;
+  CONTEXT_IDS.push(cont.id);
+  CONTEXT_FUNCS[cont.id] = {
+    before:
+      cont.beforeFunc && require(`./messageHandlers/${cont.beforeFunc}.js`),
+    after: cont.afterFunc && require(`./messageHandlers/${cont.afterFunc}.js`),
+  };
+  return `If ${cont.condition} then have the response start with "${cont.id}" and generate a response about "${cont.response}"`;
+});
 
 // Send a generic discord message to the authenticated user
 const sendRouteMessage = async ({ adventurer, body }) => {
@@ -20,12 +39,37 @@ const directMessageHandler = async (message) => {
   });
   // If the discord user isn't an adventurer, ignore them
   if (!adventurer) return;
+  const context = adventurer.aiContext
+    ? [adventurer.aiContext, ...CONTEXT_STRS]
+    : CONTEXT_STRS;
+  const conversation = adventurer.aiConversation;
+  const userMsg = { content: message.content, role: COMPLETION_ROLES.USER };
+  conversation.push(userMsg);
   // Generate the message using ai & respond to them
-  const response = await generateSingleResponse(
-    message.content,
-    adventurer.aiContext
+  let genMessage = await generateConversationResponse(context, conversation);
+  const assistMsg = { content: genMessage, role: COMPLETION_ROLES.ASSISTANT };
+
+  // See if a context function was called
+  const matchedId = CONTEXT_IDS.find((id) => genMessage.startsWith(id));
+  const contextFuncs = CONTEXT_FUNCS[matchedId];
+  // Remove the context id from the generated message
+  if (matchedId) genMessage = genMessage.replace(matchedId, "").trim();
+  // Run the context before function and update the gen message with it
+  if (contextFuncs?.before)
+    genMessage = await contextFuncs.before(adventurer, message, genMessage);
+
+  // Send the assistant's discord message
+  const sendDiscProm = model.sendMessage(adventurer, genMessage);
+  // Update the player's conversation transcript
+  const updateAdvenProm = alternateModels.ADVENTURER.updateOne(
+    { _id: adventurer._id },
+    { $push: { aiConversation: { $each: [userMsg, assistMsg] } } }
   );
-  await model.sendMessage(adventurer, response);
+  await Promise.all([sendDiscProm, updateAdvenProm]);
+
+  // Run the context after function
+  if (contextFuncs?.after)
+    await contextFuncs.after(adventurer, message, genMessage);
 };
 
 const reactionAddHandler = async (reaction, user) => {
