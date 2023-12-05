@@ -6,6 +6,13 @@
       "condition": "the message says to clear the conversation",
       "response": "our conversation has been cleared",
       "afterFunc": "clearConversation"
+    },
+    {
+      "id": "PORTAL",
+      "condition": "the message says something involving creating a portal, url, or access",
+      "response": "here is your portal",
+      "beforeFunc": "createPortal"
     }
-  ]
+  ],
+  "PORTAL_TIMEOUT": 600000
 }
