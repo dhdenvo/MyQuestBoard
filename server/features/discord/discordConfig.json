@@ -1,3 +1,11 @@
 {
-  "RESPONSE_CONTEXTS": []
+  "RESPONSE_CONTEXTS": [
+    "Keep responses at longest 3 sentences unless requested by the user to be a specific length.",
+    {
+      "id": "CLEAR",
+      "condition": "the message says to clear the conversation",
+      "response": "our conversation has been cleared",
+      "func": "clearConversation"
+    }
+  ]
 }
