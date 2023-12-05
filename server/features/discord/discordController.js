@@ -9,6 +9,16 @@ const model = require("./discordModel");
 const { RESPONSE_CONTEXTS } = require("./discordConfig.json");
 const { COMPLETION_ROLES } = require("../shared/configs/aiConfig.json");
 
+// Create the constants required for the context feature
+const CONTEXT_FUNCS = {};
+const CONTEXT_IDS = [];
+const CONTEXT_STRS = RESPONSE_CONTEXTS.map((cont) => {
+  if (typeof cont === typeof "") return cont;
+  CONTEXT_IDS.push(cont.id);
+  CONTEXT_FUNCS[cont.id] = require(`./messageHandlers/${cont.func}.js`);
+  return `If ${cont.condition} then have the response start with "${cont.id}" and generate a response about "${cont.response}"`;
+});
+
 // Send a generic discord message to the authenticated user
 const sendRouteMessage = async ({ adventurer, body }) => {
   let message = body?.message;
@@ -26,13 +36,18 @@ const directMessageHandler = async (message) => {
   // If the discord user isn't an adventurer, ignore them
   if (!adventurer) return;
   const context = adventurer.aiContext
-    ? [adventurer.aiContext, ...RESPONSE_CONTEXTS]
-    : RESPONSE_CONTEXTS;
+    ? [adventurer.aiContext, ...CONTEXT_STRS]
+    : CONTEXT_STRS;
   const conversation = adventurer.aiConversation;
   const userMsg = { content: message.content, role: COMPLETION_ROLES.USER };
   conversation.push(userMsg);
   // Generate the message using ai & respond to them
-  const genMessage = await generateConversationResponse(context, conversation);
+  let genMessage = await generateConversationResponse(context, conversation);
+
+  // See if a context function was called
+  const matchedId = CONTEXT_IDS.find((id) => genMessage.startsWith(id));
+  if (matchedId) genMessage = genMessage.replace(matchedId, "").trim();
+
   // Send the assistant's discord message
   const sendDiscProm = model.sendMessage(adventurer, genMessage);
   // Update the player's conversation transcript
@@ -42,6 +57,7 @@ const directMessageHandler = async (message) => {
     { $push: { aiConversation: { $each: [userMsg, assistMsg] } } }
   );
   await Promise.all([sendDiscProm, updateAdvenProm]);
+  if (matchedId) await CONTEXT_FUNCS[matchedId](adventurer, message);
 };
 
 const reactionAddHandler = async (reaction, user) => {
