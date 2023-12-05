@@ -13,5 +13,6 @@
       "response": "here is your portal",
       "beforeFunc": "createPortal"
     }
-  ]
+  ],
+  "PORTAL_TIMEOUT": 600000
 }
