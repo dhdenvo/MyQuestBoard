@@ -6,6 +6,7 @@ const CRONS = [
   { path: "./cronFuncs/imageCreator", runtime: "0 0 * * * *" },
   { path: "./cronFuncs/updateRank", runtime: "0 */10 * * * *" },
   { path: "./cronFuncs/conversationCleaner", runtime: "0 * * * * *" },
+  { path: "./cronFuncs/timeZoneResetter", runtime: "0 */10 * * * *" },
 ];
 
 // A system for controlling how cron jobs are logged
