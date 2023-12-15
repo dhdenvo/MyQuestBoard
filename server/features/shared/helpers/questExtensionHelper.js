@@ -1,13 +1,13 @@
 const { FREQUENCY_TYPES } = require("../configs/questConfig.json");
 const alternateModels = require("./alternateModels");
-const { differenceInDays, isWeekend } = require("date-fns");
+const { isWeekend, set } = require("date-fns");
 
 // Auto increase a date until it passes the current date
 const autoIncFunc = (func, date, condFunc = () => true) => {
   const newDate = func(date, 1);
   if (
-    differenceInDays(newDate, new Date(0)) >
-      differenceInDays(new Date(), new Date(0)) &&
+    newDate >
+      set(new Date(), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }) &&
     condFunc(newDate)
   )
     return newDate;
