@@ -1,7 +1,7 @@
 const { CronJob } = require("cron");
 
 const CRONS = [
-  { path: "./cronFuncs/questFailure", runtime: "0 50 23 * * *" },
+  { path: "./cronFuncs/questFailure", runtime: "0 59 * * * *" },
   { path: "./cronFuncs/questReminder", runtime: "0 * * * * *" },
   { path: "./cronFuncs/imageCreator", runtime: "0 0 * * * *" },
   { path: "./cronFuncs/updateRank", runtime: "0 */10 * * * *" },

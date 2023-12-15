@@ -33,7 +33,7 @@ module.exports = async () => {
                     format: "%Y-%j",
                   },
                 },
-                " 23:00",
+                " 23:59",
               ],
             },
             {
