@@ -1,9 +1,9 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
-const { format } = require("date-fns");
 const { sendMessage } = require("../../features/discord/discordModel");
 const {
   generateSingleResponse,
 } = require("../../features/shared/helpers/aiHelper");
+const { COLLECTION_NAMES } = require("../../global/config.json");
 
 const sendReminder = async (quests) => {
   const adventurer = quests[0].adventurer;
@@ -51,50 +51,75 @@ const sendReminder = async (quests) => {
 };
 
 module.exports = async () => {
-  const time = format(new Date(), "HH:mm", {
-    timeZone: "America/Toronto",
-  });
-  const date = format(new Date(), "yyyy-DDDD", {
-    timeZone: "America/Toronto",
-  });
-
   // Get all quests that are to be reminded on
-  const reminderQuests = await alternateModels.QUEST.findMany({
-    isComplete: false,
-    $expr: {
-      $in: [
-        true,
-        {
-          $map: {
-            input: "$reminderFrequency",
-            as: "remind",
-            in: {
-              $and: [
-                { $eq: [time, "$$remind.time"] },
-                {
-                  $eq: [
-                    date,
+  const reminderQuests = await alternateModels.QUEST.aggregate([
+    {
+      $lookup: {
+        from: COLLECTION_NAMES.ADVENTURER,
+        localField: "adventurer",
+        foreignField: "_id",
+        as: "adventurer",
+      },
+    },
+    { $unwind: "$adventurer" },
+    {
+      // Save the current date & time in the adventurer's time zone
+      $addFields: {
+        currTime: {
+          $dateToString: {
+            date: new Date(),
+            format: "%H:%M",
+            timezone: "$adventurer.timeZone.current",
+          },
+        },
+        currDate: {
+          $dateToString: {
+            date: new Date(),
+            format: "%Y-%j",
+            timezone: "$adventurer.timeZone.current",
+          },
+        },
+      },
+    },
+    {
+      $match: {
+        isComplete: false,
+        $expr: {
+          $in: [
+            true,
+            {
+              $map: {
+                input: "$reminderFrequency",
+                as: "remind",
+                in: {
+                  $and: [
+                    { $eq: ["$currTime", "$$remind.time"] },
                     {
-                      $dateToString: {
-                        date: {
-                          $dateAdd: {
-                            startDate: "$dueDate",
-                            unit: "day",
-                            amount: "$$remind.dayDiff",
+                      $eq: [
+                        "$currDate",
+                        {
+                          $dateToString: {
+                            date: {
+                              $dateAdd: {
+                                startDate: "$dueDate",
+                                unit: "day",
+                                amount: "$$remind.dayDiff",
+                              },
+                            },
+                            format: "%Y-%j",
                           },
                         },
-                        format: "%Y-0%j",
-                      },
+                      ],
                     },
                   ],
                 },
-              ],
+              },
             },
-          },
+          ],
         },
-      ],
+      },
     },
-  }).populate("adventurer");
+  ]);
   if (!reminderQuests.length) return;
 
   const groupedQuests = reminderQuests.reduce((g, quest) => {

@@ -20,6 +20,11 @@ const adventurerSchema = Schema(
     aiContext: String,
     aiConversation: { type: [conversationSchema], default: [] },
     hasImage: { type: Boolean, default: false },
+    timeZone: {
+      current: { type: String, default: "America/Toronto" },
+      base: { type: String, default: "America/Toronto" },
+      resetCurrentOn: { type: Date, default: null },
+    },
   },
   { versionKey: false }
 );
