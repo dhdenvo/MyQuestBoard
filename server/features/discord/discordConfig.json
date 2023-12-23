@@ -12,6 +12,12 @@
       "condition": "the message says something involving creating a portal, url, or access",
       "response": "here is your portal",
       "beforeFunc": "createPortal"
+    },
+    {
+      "id": "VACATION",
+      "condition": "the message says something about going on vacation or coming back from vacation",
+      "response": "enjoy your vacation or welcome back",
+      "afterFunc": "toggleVacation"
     }
   ],
   "PORTAL_TIMEOUT": 600000
