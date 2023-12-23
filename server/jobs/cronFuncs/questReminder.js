@@ -88,10 +88,7 @@ module.exports = async () => {
           // Check if the adventurer is on vacation
           $and: [
             {
-              $or: [
-                { $eq: ["$adventurer.isOnVacation", false] },
-                { $eq: ["$isAvailOnVacation", true] },
-              ],
+              $or: [{ $not: "$adventurer.isOnVacation" }, "$isAvailOnVacation"],
             },
             // Check if the quest's reminder frequency matches the current time
             {
