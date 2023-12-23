@@ -85,35 +85,44 @@ module.exports = async () => {
       $match: {
         isComplete: false,
         $expr: {
-          $in: [
-            true,
+          // Check if the adventurer is on vacation
+          $and: [
             {
-              $map: {
-                input: "$reminderFrequency",
-                as: "remind",
-                in: {
-                  $and: [
-                    { $eq: ["$currTime", "$$remind.time"] },
-                    {
-                      $eq: [
-                        "$currDate",
+              $or: [{ $not: "$adventurer.isOnVacation" }, "$isAvailOnVacation"],
+            },
+            // Check if the quest's reminder frequency matches the current time
+            {
+              $in: [
+                true,
+                {
+                  $map: {
+                    input: "$reminderFrequency",
+                    as: "remind",
+                    in: {
+                      $and: [
+                        { $eq: ["$currTime", "$$remind.time"] },
                         {
-                          $dateToString: {
-                            date: {
-                              $dateAdd: {
-                                startDate: "$dueDate",
-                                unit: "day",
-                                amount: "$$remind.dayDiff",
+                          $eq: [
+                            "$currDate",
+                            {
+                              $dateToString: {
+                                date: {
+                                  $dateAdd: {
+                                    startDate: "$dueDate",
+                                    unit: "day",
+                                    amount: "$$remind.dayDiff",
+                                  },
+                                },
+                                format: "%Y-%j",
                               },
                             },
-                            format: "%Y-%j",
-                          },
+                          ],
                         },
                       ],
                     },
-                  ],
+                  },
                 },
-              },
+              ],
             },
           ],
         },

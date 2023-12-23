@@ -4,7 +4,7 @@ const { COLLECTION_NAMES } = require("../../global/config.json");
 
 module.exports = async () => {
   // Get all quests that have been failed
-  const failedQuests = await alternateModels.QUEST.aggregate([
+  const allFailedQuests = await alternateModels.QUEST.aggregate([
     {
       $lookup: {
         from: COLLECTION_NAMES.ADVENTURER,
@@ -48,7 +48,11 @@ module.exports = async () => {
       },
     },
   ]);
-  if (!failedQuests.length) return;
+  if (!allFailedQuests.length) return;
+  // Don't create a completion or update the adventurer if on vacation
+  const failedQuests = allFailedQuests.filter(
+    (quest) => !quest.adventurer.isOnVacation || quest.isAvailOnVacation
+  );
 
   // Create a completion for every quest failed
   await alternateModels.COMPLETION.createMany(
@@ -77,5 +81,5 @@ module.exports = async () => {
   );
   await Promise.all(adventurerProms);
   // For every quest failed, extend the due date
-  await Promise.all(failedQuests.map((quest) => extendQuest(quest, true)));
+  await Promise.all(allFailedQuests.map((quest) => extendQuest(quest, true)));
 };

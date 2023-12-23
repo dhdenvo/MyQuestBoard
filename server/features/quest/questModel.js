@@ -41,6 +41,7 @@ const questSchema = Schema(
     },
     leniency: { type: Number, default: 0 },
     isComplete: { type: Boolean, default: false },
+    isAvailOnVacation: { type: Boolean, default: false },
     hasImage: { type: Boolean, default: false },
   },
   { versionKey: false }
