@@ -1,24 +1,32 @@
 const { discordConnProm } = require("../../global/globalConnections");
 
-// Get a guild user's presence
-const getPresence = async (adventurer) => {
+// Get an adventurer's discord user
+const getUser = async (adventurer) => {
+  if (!adventurer.discordId) return;
   const client = await discordConnProm;
-  const guildMember = await client.guilds.cache
+  return await client.users.fetch(adventurer.discordId);
+};
+
+// Get an adventurer's guild member from any guild
+const getAnyGuildUser = async (adventurer) => {
+  if (!adventurer.discordId) return;
+  const client = await discordConnProm;
+  return await client.guilds.cache
     .map((guild) => guild.members.fetch(adventurer.discordId))
     .find((x) => x);
-  return guildMember.presence;
 };
+
+// Get a guild user's presence
+const getPresence = (adventurer) =>
+  getAnyGuildUser(adventurer).then((guildMember) => guildMember?.presence);
 
 // Get a user's status
 const getStatus = (adventurer) =>
-  getPresence(adventurer).then(({ status }) => status);
+  getPresence(adventurer).then((presence) => presence?.status);
 
 // Send a discord direct message to an adventurer
 const sendMessage = async (adventurer, message) => {
-  const client = await discordConnProm;
-  const { discordId } = adventurer;
-  if (!discordId) return;
-  const discUser = await client.users.fetch(discordId);
+  const discUser = await getUser(adventurer);
   return await discUser.send(message);
 };
 
