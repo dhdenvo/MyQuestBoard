@@ -1,28 +1,31 @@
 const { getStatus } = require("../../features/discord/discordModel");
 const alternateModels = require("../../features/shared/helpers/alternateModels");
 
-module.exports = async (checkAsleep = true) => {
-  const adventurers = await alternateModels.ADVENTURER.pipeline([
-    { $project: { discordId: 1, sleepInfo: 1 } },
+module.exports = async (checkAsleep = false) => {
+  // Define the below pipeline's sleep range
+  let asleepCheck = {
+    $and: [
+      { $lte: ["$sleepInfo.start", "$currTime"] },
+      { $gte: ["$sleepInfo.end", "$currTime"] },
+    ],
+  };
+  // Invert it if checking for awake
+  if (!checkAsleep) asleepCheck = { $not: asleepCheck };
+  // Pull all adventurers who qualify for the sleep check
+  const adventurers = await alternateModels.ADVENTURER.aggregate([
+    { $project: { discordId: 1, sleepInfo: 1, timeZone: 1 } },
     {
       $addFields: {
         currTime: {
           $dateToString: {
             date: new Date(),
             format: "%H:%M",
-            timezone: "$adventurer.timeZone.current",
+            timezone: "$timeZone.current",
           },
         },
       },
     },
-    {
-      $match: {
-        "sleepInfo.isAsleep": !checkAsleep,
-        // Check below logic
-        "sleepInfo.start": { [checkAsleep ? "$lt" : "$gt"]: "$currTime" },
-        "sleepInfo.end": { [checkAsleep ? "$gt" : "$lt"]: "$currTime" },
-      },
-    },
+    { $match: { "sleepInfo.isAsleep": !checkAsleep, $expr: asleepCheck } },
   ]);
   if (!adventurers.length) return;
 
