@@ -1,6 +1,7 @@
 const { getStatus } = require("../../features/discord/discordModel");
 const alternateModels = require("../../features/shared/helpers/alternateModels");
 const { SLEEP_STATUSES } = require("../cronConfig");
+const questReminder = require("./questReminder");
 
 module.exports = async (checkAsleep = true) => {
   // Define the below pipeline's sleep range
@@ -30,6 +31,7 @@ module.exports = async (checkAsleep = true) => {
   ]);
   if (!adventurers.length) return;
 
+  // Pull the adventurer's discord status and decide if they are awake or asleep based on it
   const statusProms = adventurers.map(async (adventurer) => {
     const status = await getStatus(adventurer);
     const validStatuses = checkAsleep
@@ -41,9 +43,15 @@ module.exports = async (checkAsleep = true) => {
   const changeInStatus = statuses.filter(([_, val]) => val);
   if (!changeInStatus.length) return;
 
+  // Update the adventurer's sleep info
   await alternateModels.ADVENTURER.updateMany(
     { _id: { $in: changeInStatus.map(([id]) => id) } },
     { $set: { "sleepInfo.isAsleep": checkAsleep } }
   );
-  // Run quest reminders that are for after they wake up or fall asleep
+
+  // Send the reminder for all quests for the changed status adventurers
+  await questReminder({
+    adventurer: { $in: changeInStatus.map(([id]) => id) },
+    specialTime: checkAsleep ? "sleep" : "wake",
+  });
 };

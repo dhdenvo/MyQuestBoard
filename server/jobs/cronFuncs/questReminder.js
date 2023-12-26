@@ -50,9 +50,11 @@ const sendReminder = async (quests) => {
   }
 };
 
-module.exports = async () => {
+module.exports = async (query = {}) => {
+  const { specialTime, ...dbQuery } = query;
   // Get all quests that are to be reminded on
   const reminderQuests = await alternateModels.QUEST.aggregate([
+    { $match: dbQuery },
     {
       $lookup: {
         from: COLLECTION_NAMES.ADVENTURER,
@@ -100,7 +102,7 @@ module.exports = async () => {
                     as: "remind",
                     in: {
                       $and: [
-                        { $eq: ["$currTime", "$$remind.time"] },
+                        { $eq: [specialTime ?? "$currTime", "$$remind.time"] },
                         {
                           $eq: [
                             "$currDate",
