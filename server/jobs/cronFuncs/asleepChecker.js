@@ -1,7 +1,8 @@
 const { getStatus } = require("../../features/discord/discordModel");
 const alternateModels = require("../../features/shared/helpers/alternateModels");
+const { SLEEP_STATUSES } = require("../cronConfig");
 
-module.exports = async (checkAsleep = false) => {
+module.exports = async (checkAsleep = true) => {
   // Define the below pipeline's sleep range
   let asleepCheck = {
     $and: [
@@ -31,7 +32,6 @@ module.exports = async (checkAsleep = false) => {
 
   const statusProms = adventurers.map(async (adventurer) => {
     const status = await getStatus(adventurer);
-    if (!status) return;
     const validStatuses = checkAsleep
       ? SLEEP_STATUSES.ASLEEP
       : SLEEP_STATUSES.AWAKE;
