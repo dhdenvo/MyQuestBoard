@@ -1,6 +1,6 @@
 const { getStatus } = require("../../features/discord/discordModel");
 const alternateModels = require("../../features/shared/helpers/alternateModels");
-const { SLEEP_STATUSES } = require("../cronConfig");
+const { SLEEP_STATUSES, SPECIAL_TIMES } = require("../cronConfig");
 const questReminder = require("./questReminder");
 
 module.exports = async (checkAsleep = true) => {
@@ -52,6 +52,6 @@ module.exports = async (checkAsleep = true) => {
   // Send the reminder for all quests for the changed status adventurers
   await questReminder({
     adventurer: { $in: changeInStatus.map(([id]) => id) },
-    specialTime: checkAsleep ? "sleep" : "wake",
+    specialTime: checkAsleep ? SPECIAL_TIMES.ASLEEP : SPECIAL_TIMES.AWAKE,
   });
 };
