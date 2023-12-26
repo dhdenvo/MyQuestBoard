@@ -17,6 +17,7 @@ const getAnyGuildUser = async (adventurer) => {
 };
 
 // Get a guild user's presence
+// (Note: returns undefined if user hasn't come online discord since app start)
 const getPresence = (adventurer) =>
   getAnyGuildUser(adventurer).then((guildMember) => guildMember?.presence);
 

@@ -41,7 +41,7 @@ module.exports = async (checkAsleep = true) => {
   const changeInStatus = statuses.filter(([_, val]) => val);
   if (!changeInStatus.length) return;
 
-  alternateModels.ADVENTURER.updateMany(
+  await alternateModels.ADVENTURER.updateMany(
     { _id: { $in: changeInStatus.map(([id]) => id) } },
     { $set: { "sleepInfo.isAsleep": checkAsleep } }
   );
