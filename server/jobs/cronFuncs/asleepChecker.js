@@ -5,11 +5,16 @@ const questReminder = require("./questReminder");
 
 module.exports = async (checkAsleep = true) => {
   // Define the below pipeline's sleep range
+  const rangeArr = [
+    { $lte: ["$sleepInfo.start", "$currTime"] },
+    { $gte: ["$sleepInfo.end", "$currTime"] },
+  ];
   let asleepCheck = {
-    $and: [
-      { $lte: ["$sleepInfo.start", "$currTime"] },
-      { $gte: ["$sleepInfo.end", "$currTime"] },
-    ],
+    $cond: {
+      if: { $lt: ["$sleepInfo.start", "$sleepInfo.end"] },
+      then: { $and: rangeArr },
+      else: { $or: rangeArr },
+    },
   };
   // Invert it if checking for awake
   if (!checkAsleep) asleepCheck = { $not: asleepCheck };
