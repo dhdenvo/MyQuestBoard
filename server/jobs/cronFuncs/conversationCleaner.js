@@ -1,6 +1,6 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
 const { subMinutes } = require("date-fns");
-const { CLEANER_TIMEOUT } = require("../cronConfig.json");
+const { CLEANER_TIMEOUT } = require("../cronConfig");
 
 module.exports = () =>
   alternateModels.ADVENTURER.updateMany(

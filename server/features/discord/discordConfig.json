@@ -20,5 +20,11 @@
       "afterFunc": "toggleVacation"
     }
   ],
-  "PORTAL_TIMEOUT": 600000
+  "PORTAL_TIMEOUT": 600000,
+  "STATUSES": {
+    "ONLINE": "online",
+    "IDLE": "idle",
+    "OFFLINE": "offline",
+    "DND": "dnd"
+  }
 }

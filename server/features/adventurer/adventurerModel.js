@@ -26,6 +26,11 @@ const adventurerSchema = Schema(
       base: { type: String, default: "America/Toronto" },
       resetCurrentOn: { type: Date, default: null },
     },
+    sleepInfo: {
+      start: String,
+      end: String,
+      isAsleep: { type: Boolean, default: false },
+    },
   },
   { versionKey: false }
 );
