@@ -1,6 +1,8 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
 const extendQuest = require("../../features/shared/helpers/questExtensionHelper");
 const { COLLECTION_NAMES } = require("../../global/config.json");
+const { SPECIAL_TIMES } = require("../cronConfig");
+const questReminder = require("./questReminder");
 
 module.exports = async () => {
   // Get all quests that have been failed
@@ -80,6 +82,13 @@ module.exports = async () => {
     )
   );
   await Promise.all(adventurerProms);
+  await questReminder({
+    _id: { $in: failedQuests.map((_id) => _id) },
+    specialTime: SPECIAL_TIMES,
+    msgAlteration:
+      "These are all failed quests, ensure the message reminds the " +
+      "user that they should try to avoid failing them in the future.",
+  });
   // For every quest failed, extend the due date
   await Promise.all(allFailedQuests.map((quest) => extendQuest(quest, true)));
 };

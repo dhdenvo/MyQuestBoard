@@ -5,7 +5,7 @@ const {
 } = require("../../features/shared/helpers/aiHelper");
 const { COLLECTION_NAMES } = require("../../global/config.json");
 
-const sendReminder = async (quests) => {
+const sendReminder = async (quests, msgAlteration) => {
   const adventurer = quests[0].adventurer;
 
   // Generate an emoji to react to the message on
@@ -30,6 +30,8 @@ const sendReminder = async (quests) => {
       .join(", ")}. `;
   generationMessage +=
     "Make the message approximately 2 sentences and include emojis.";
+  // Update the generation message configuration if a msg alteration is passed
+  if (msgAlteration) generationMessage += " " + msgAlteration;
 
   let message = await generateSingleResponse(
     generationMessage,
@@ -51,7 +53,7 @@ const sendReminder = async (quests) => {
 };
 
 module.exports = async (query = {}) => {
-  const { specialTime, ...dbQuery } = query;
+  const { specialTime, msgAlteration, ...dbQuery } = query;
   // Get all quests that are to be reminded on
   const reminderQuests = await alternateModels.QUEST.aggregate([
     { $match: dbQuery },
@@ -138,5 +140,6 @@ module.exports = async (query = {}) => {
     return g;
   }, {});
   // Send reminders for every quest that needs reminding
-  for (quest of Object.values(groupedQuests)) await sendReminder(quest);
+  for (quest of Object.values(groupedQuests))
+    await sendReminder(quest, msgAlteration);
 };

@@ -10,6 +10,7 @@
   },
   "SPECIAL_TIMES": {
     "ASLEEP": "asleep",
-    "AWAKE": "awake"
+    "AWAKE": "awake",
+    "FAILURE": "failure"
   }
 }
