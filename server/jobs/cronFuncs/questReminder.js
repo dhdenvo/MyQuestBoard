@@ -1,24 +1,49 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
-const { sendMessage } = require("../../features/discord/discordModel");
+const {
+  sendMessage,
+  checkReaction,
+} = require("../../features/discord/discordModel");
 const {
   generateSingleResponse,
 } = require("../../features/shared/helpers/aiHelper");
 const { COLLECTION_NAMES } = require("../cronConfig");
 
+const generateQuestEmoji = async (quest, emojis, ignores) => {
+  const adventurer = quest.adventurer;
+  const fullDescription = `${quest.title} (${quest.description})`;
+  // Generate an emoji to react to the message on
+  let emojiMessage =
+    `Generate ten unique Standard Unicode emoji for this description (${adventurer.aiContext}). ` +
+    "Separate them by new lines (\n) and do not include anything else in the message.\n" +
+    fullDescription;
+  // Make sure there are no duplicate emojis between calls
+  if (ignores)
+    emojiMessage += "\nDo not give the following emojis:" + ignores.join(", ");
+  let genEmojis = await generateSingleResponse(emojiMessage);
+  // Extract the emojis from each line, removing all non emojis
+  genEmojis = genEmojis
+    .split("\n")
+    .map((txt) => [...txt.replace(/\P{Extended_Pictographic}/u, "")].pop(-1));
+
+  // Loop through emojis until there is a valid one
+  for (const genEmoji of genEmojis) {
+    if (emojis.includes(genEmoji)) continue;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    const isValid = await checkReaction(genEmoji);
+    if (isValid) {
+      emojis.push(genEmoji);
+      return emojis;
+    }
+  }
+  // In case the set didn't have any valid emojis
+  return generateQuestEmoji(quest, emojis, genEmojis);
+};
+
 const sendReminder = async (quests, msgAlteration) => {
   const adventurer = quests[0].adventurer;
 
-  // Generate an emoji to react to the message on
-  const emojiMessage =
-    `Generate a single unique Standard Unicode emoji for each description (${adventurer.aiContext}). Separate them by new lines (\n) and do not include anything else in the message.\n` +
-    quests
-      .map(({ title, description }) => `${title} (${description})`)
-      .join("\n");
-  let emojis = await generateSingleResponse(emojiMessage);
-  // Extract the emojis from each line, removing all non emojis
-  emojis = emojis
-    .split("\n")
-    .map((txt) => [...txt.replace(/\P{Extended_Pictographic}/u, "")].pop(-1));
+  const emojis = [];
+  for (const quest of quests) await generateQuestEmoji(quest, emojis);
 
   // Generate a custom message for the reminder
   let generationMessage = "Generate a message reminding me on ";
@@ -29,7 +54,7 @@ const sendReminder = async (quests, msgAlteration) => {
       .map(({ title, description }) => `${title} (about ${description})`)
       .join(", ")}. `;
   generationMessage +=
-    "Make the message approximately 2 sentences and include emojis.";
+    "Make the message approximately 2 sentences and include emojis in the message, but do not end the message with emojis.";
   // Update the generation message configuration if a msg alteration is passed
   if (msgAlteration) generationMessage += " " + msgAlteration;
 
@@ -47,7 +72,7 @@ const sendReminder = async (quests, msgAlteration) => {
   const sentMessage = await sendMessage(adventurer, message);
   // Add the emojis
   for (emoji of emojis) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     await sentMessage.react(emoji);
   }
 };

@@ -1,5 +1,16 @@
 const { discordConnProm } = require("../../global/globalConnections");
 
+// Pull a test message for checking if a emoji is valid
+let testMsgRes;
+let testMessage = new Promise((res) => (testMsgRes = res));
+discordConnProm.then(async (client) => {
+  const channel = await client.channels.fetch(process.env.DISCORD_TEST_CHANNEL);
+  const message = await channel.messages.fetch(
+    process.env.DISCORD_TEST_MESSAGE
+  );
+  testMsgRes(message);
+});
+
 // Get an adventurer's discord user
 const getUser = async (adventurer) => {
   if (!adventurer.discordId) return;
@@ -49,9 +60,19 @@ const handleReactionAdd = async (func) => {
   });
 };
 
+// Check if a reaction is a valid reaction
+const checkReaction = (emoji) =>
+  testMessage.then((msg) =>
+    msg
+      .react(emoji)
+      .then(() => true)
+      .catch(() => false)
+  );
+
 module.exports = {
   getStatus,
   sendMessage,
   handleDirectMessage,
   handleReactionAdd,
+  checkReaction,
 };
