@@ -1,7 +1,6 @@
 const alternateModels = require("../../features/shared/helpers/alternateModels");
 const extendQuest = require("../../features/shared/helpers/questExtensionHelper");
-const { COLLECTION_NAMES } = require("../../global/config.json");
-const { SPECIAL_TIMES } = require("../cronConfig");
+const { SPECIAL_TIMES, COLLECTION_NAMES } = require("../cronConfig");
 const questReminder = require("./questReminder");
 
 module.exports = async () => {

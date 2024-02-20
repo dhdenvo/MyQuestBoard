@@ -1,7 +1,7 @@
 const { saveUrl } = require("../../features/image/imageModel");
 const { generateAiImage } = require("../../features/shared/helpers/aiHelper");
 const alternateModels = require("../../features/shared/helpers/alternateModels");
-const { COLLECTION_NAMES } = require("../../global/config.json");
+const { COLLECTION_NAMES } = require("../cronConfig");
 
 // The list of collections that store an image
 const COLLECTIONS = [

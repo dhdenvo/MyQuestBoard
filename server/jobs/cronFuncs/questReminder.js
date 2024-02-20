@@ -3,7 +3,7 @@ const { sendMessage } = require("../../features/discord/discordModel");
 const {
   generateSingleResponse,
 } = require("../../features/shared/helpers/aiHelper");
-const { COLLECTION_NAMES } = require("../../global/config.json");
+const { COLLECTION_NAMES } = require("../cronConfig");
 
 const sendReminder = async (quests, msgAlteration) => {
   const adventurer = quests[0].adventurer;
