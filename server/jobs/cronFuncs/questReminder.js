@@ -13,9 +13,8 @@ const generateQuestEmoji = async (quest, emojis, ignores) => {
   const fullDescription = `${quest.title} (${quest.description})`;
   // Generate an emoji to react to the message on
   let emojiMessage =
-    `Generate ten unique Standard Unicode emoji for this description (${adventurer.aiContext}). ` +
-    "Separate them by new lines (\n) and do not include anything else in the message.\n" +
-    fullDescription;
+    `Generate three unique Standard Unicode emoji related to ${fullDescription} (${adventurer.aiContext}). ` +
+    "Separate them by new lines (\n) and do not include anything else in the message.";
   // Make sure there are no duplicate emojis between calls
   if (ignores)
     emojiMessage += "\nDo not give the following emojis:" + ignores.join(", ");
