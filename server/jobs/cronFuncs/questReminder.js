@@ -9,11 +9,10 @@ const {
 const { COLLECTION_NAMES } = require("../cronConfig");
 
 const generateQuestEmoji = async (quest, emojis, ignores) => {
-  const adventurer = quest.adventurer;
   const fullDescription = `${quest.title} (${quest.description})`;
   // Generate an emoji to react to the message on
   let emojiMessage =
-    `Generate three unique Standard Unicode emoji related to ${fullDescription} (${adventurer.aiContext}). ` +
+    `Generate three unique Standard Unicode emoji that represent the following: ${fullDescription} ` +
     "Separate them by new lines (\n) and do not include anything else in the message.";
   // Make sure there are no duplicate emojis between calls
   if (ignores)
