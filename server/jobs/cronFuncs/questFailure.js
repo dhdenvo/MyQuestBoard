@@ -74,13 +74,15 @@ module.exports = async () => {
       }),
       {}
     )
-  ).map(([adventurer, lostAmount]) =>
-    alternateModels.ADVENTURER.updateOne(
-      { _id: adventurer._id, rankPoints: { $gte: lostAmount } },
-      { $inc: { rankPoints: -lostAmount } }
-    )
+  ).map(([adventurerId, lostAmount]) =>
+    alternateModels.ADVENTURER.updateOne({ _id: adventurerId }, [
+      {
+        $set: {
+          rankPoints: { $max: [0, { $sum: ["$rankPoints", -lostAmount] }] },
+        },
+      },
+    ])
   );
-  await Promise.all(adventurerProms);
   await questReminder({
     _id: { $in: failedQuests.map((_id) => _id) },
     specialTime: SPECIAL_TIMES,
