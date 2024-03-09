@@ -1,4 +1,6 @@
 const { CronJob } = require("cron");
+const differenceInSeconds = require("date-fns/differenceInSeconds");
+const format = require("date-fns/format");
 
 const CRONS = [
   { path: "./cronFuncs/questFailure", runtime: "0 59 * * * *" },
@@ -13,9 +15,14 @@ const CRONS = [
 
 // A system for controlling how cron jobs are logged
 const logCron = (message) => {
+  const dateMessage = `${format(
+    new Date(),
+    "MMMM dd, yyyy h:m a"
+  )}: ${message}`;
+
   switch (process.env.CRON_LOGGING) {
     case "console":
-      return console.log(message);
+      return console.log(dateMessage);
   }
 };
 
@@ -26,13 +33,15 @@ CRONS.forEach(({ path, runtime }) => {
   // Define a generic function for running all cron jobs
   const func = async () => {
     logCron(`Starting cron job ${name}`);
+    const startTime = new Date();
     // Run the cron job (catching errors)
     const res = await require(path)().catch((error) => {
       logCron(`Error in cron job ${name}: ${error}`);
       return { error };
     });
     if (res?.error) return;
-    logCron(`Completed cron job ${name}`);
+    const timeDiff = differenceInSeconds(new Date(), startTime);
+    logCron(`Completed cron job ${name} (${timeDiff}s)`);
   };
 
   // Create the cron job with the generic function
