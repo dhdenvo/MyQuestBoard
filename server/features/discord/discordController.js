@@ -50,7 +50,7 @@ const directMessageHandler = async (message) => {
   const assistMsg = { content: genMessage, role: COMPLETION_ROLES.ASSISTANT };
 
   // See if a context function was called
-  const matchedId = CONTEXT_IDS.find((id) => genMessage.startsWith(id));
+  const matchedId = CONTEXT_IDS.find((id) => genMessage.includes(id));
   const contextFuncs = CONTEXT_FUNCS[matchedId];
   // Remove the context id from the generated message
   if (matchedId) genMessage = genMessage.replace(matchedId, "").trim();
