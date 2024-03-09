@@ -55,7 +55,7 @@ module.exports = () => [
     isAvailOnVacation: true,
     reminderFrequency: [{ dayDiff: 0, time: "18:00" }],
   }),
-  "Create a quest reminding me to tell Sarah about how she has to bring her grandfather to the store.",
+  "Create a quest for telling Sarah about how she has to bring her grandfather to the store.",
   JSON.stringify({
     title: "Talk to Sarah",
     description: "Tell Sarah about her bringing her grandfather to the store",
@@ -66,7 +66,7 @@ module.exports = () => [
     isAvailOnVacation: true,
     reminderFrequency: [{ dayDiff: 0, time: "12:00" }],
   }),
-  "Create a quest reminding me to talk to Ren about the project report every week day at work.",
+  "Create a quest for talking to Ren about the project report every week day at work.",
   JSON.stringify({
     title: "Talk to Ren",
     description: "Talk to Ren about the project report",

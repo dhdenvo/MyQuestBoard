@@ -24,7 +24,7 @@ const createQuest = (content) => {
       '"isAvailOnVacation" is false if the user says it shouldn\'t appear on vacation and true if not. ' +
       "If the user doesn't specify vacation, use discretion on whether or not it should be true or false. " +
       '"reminderFrequency" is an array of when the system should remind the user of the quest. ' +
-      'Always put at least one element in the "reminderFrequency" unless the user specifies they don\'t want any reminders. ' +
+      '"reminderFrequency" should always have at least one element. ' +
       'Elements in the "reminderFrequency" are objects with two fields, "dayDiff" and "time". ' +
       '"dayDiff" is the difference between the current day and the quest\'s "dueDate". ' +
       'So 0 would be a reminder on the quest\'s "dueDate", -1 would be a reminder one day before, ' +
@@ -40,13 +40,11 @@ const createQuest = (content) => {
     role: i ? "user" : "assistant",
   }));
   conversation.push({ content, role: "user" });
-  console.log("Conversation", conversation);
   return generateConversationResponse(context, conversation);
 };
 
 module.exports = async (adv, msg, genMessage) => {
   const questStr = await createQuest(msg.content);
-  console.log(questStr);
   const quest = JSON.stringify(questStr);
   quest.adventurer = adv;
   console.log("Quest", quest);
