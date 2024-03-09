@@ -18,6 +18,12 @@
       "condition": "the message says something about going on vacation or coming back from vacation",
       "response": "enjoy your vacation or welcome back",
       "afterFunc": "toggleVacation"
+    },
+    {
+      "id": "QUEST_CREATE",
+      "condition": "the message says something about creating a quest",
+      "response": "your quest has been created",
+      "beforeFunc": "createQuest"
     }
   ],
   "PORTAL_TIMEOUT": 600000,
