@@ -21,7 +21,7 @@
     },
     {
       "id": "QUEST_CREATE",
-      "condition": "the message says something about creating a quest",
+      "condition": "the message says anything related to creating a quest",
       "response": "your quest has been created",
       "beforeFunc": "createQuest"
     }
