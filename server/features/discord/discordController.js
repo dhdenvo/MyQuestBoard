@@ -59,13 +59,18 @@ const directMessageHandler = async (message) => {
     genMessage = await contextFuncs.before(adventurer, message, genMessage);
 
   // Send the assistant's discord message
-  const sendDiscProm = model.sendMessage(adventurer, genMessage);
-  // Update the player's conversation transcript
-  const updateAdvenProm = alternateModels.ADVENTURER.updateOne(
-    { _id: adventurer._id },
-    { $push: { aiConversation: { $each: [userMsg, assistMsg] } } }
-  );
-  await Promise.all([sendDiscProm, updateAdvenProm]);
+  const sendProms = [model.sendMessage(adventurer, genMessage)];
+
+  // Update the player's conversation transcript only if its a regular conversation
+  if (!matchedId)
+    sendProms.push(
+      alternateModels.ADVENTURER.updateOne(
+        { _id: adventurer._id },
+        { $push: { aiConversation: { $each: [userMsg, assistMsg] } } }
+      )
+    );
+
+  await Promise.all(sendProms);
 
   // Run the context after function
   if (contextFuncs?.after)
