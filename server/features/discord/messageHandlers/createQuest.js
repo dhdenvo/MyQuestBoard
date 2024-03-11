@@ -1,10 +1,12 @@
 const format = require("date-fns/format");
 const {
   generateConversationResponse,
+  generateSingleResponse,
 } = require("../../shared/helpers/aiHelper");
 const questCreationExamples = require("./questCreationExamples");
+const { QUEST } = require("../../shared/helpers/alternateModels");
 
-const createQuest = (content) => {
+const createQuestStr = (content) => {
   const currDate = format(new Date(), "yyyy-MM-dd");
   const context = [
     "All generated messages should be a json representing a quest with the following fields. " +
@@ -43,10 +45,19 @@ const createQuest = (content) => {
   return generateConversationResponse(context, conversation);
 };
 
-module.exports = async (adv, msg, genMessage) => {
-  const questStr = await createQuest(msg.content);
-  const quest = JSON.stringify(questStr);
-  quest.adventurer = adv;
-  console.log("Quest", quest);
-  throw "";
+const createQuest = async (adv, msg) => {
+  const questStr = await createQuestStr(msg.content);
+  const quest = JSON.parse(questStr);
+  quest.adventurer = adv._id;
+  await QUEST.createOne(quest);
 };
+
+module.exports = (adv, msg, genMsg) =>
+  createQuest(adv, msg)
+    .then(() => genMsg)
+    .catch(() =>
+      generateSingleResponse(
+        "Write a message apologizing for being unable to create the quest",
+        adv.aiContext
+      )
+    );
