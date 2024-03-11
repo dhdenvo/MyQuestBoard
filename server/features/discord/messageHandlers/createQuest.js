@@ -5,9 +5,11 @@ const {
 } = require("../../shared/helpers/aiHelper");
 const questCreationExamples = require("./questCreationExamples");
 const { QUEST } = require("../../shared/helpers/alternateModels");
+const addDays = require("date-fns/addDays");
 
 const createQuestStr = (content) => {
   const currDate = format(new Date(), "yyyy-MM-dd");
+  const tomDate = format(addDays(new Date(), 1), "yyyy-MM-dd");
   const context = [
     "All generated messages should be a json representing a quest with the following fields. " +
       `The current date is ${currDate} for reference. ` +
@@ -21,8 +23,8 @@ const createQuestStr = (content) => {
       'If the quest repeats on weekdays set frequency to "weekday". ' +
       'If the quest repeats on weekends set frequency to "weekends". ' +
       '"dueDate" is required, is when the quest should be completed on, and should just be a date in format "YYYY-MM-DD". ' +
-      'Avoid making "dueDate" be the current day unless the user says its due today. ' +
       '"endDate" is optional, is when the quest should be stop repeating, and should just be a date in format "YYYY-MM-DD". ' +
+      `By default, set "dueDate" to ${tomDate} unless specified. ` +
       '"isAvailOnVacation" is false if the user says it shouldn\'t appear on vacation and true if not. ' +
       "If the user doesn't specify vacation, use discretion on whether or not it should be true or false. " +
       '"reminderFrequency" is an array of when the system should remind the user of the quest. ' +
