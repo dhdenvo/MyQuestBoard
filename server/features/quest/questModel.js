@@ -12,7 +12,7 @@ const questSchema = Schema(
     },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    fullView: { type: [String] },
+    fullView: { type: [String], default: [] },
     rankPoints: { type: Number, default: 0 },
     isSecret: { type: Boolean, default: false },
     frequency: {
