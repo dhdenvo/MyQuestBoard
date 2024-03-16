@@ -47,7 +47,7 @@ const handleDirectMessage = async (func) => {
   const client = await discordConnProm;
   client.on("messageCreate", async (message) => {
     if (message?.author?.bot || message?.guildId) return;
-    func(message);
+    func(message).catch(() => null);
   });
 };
 

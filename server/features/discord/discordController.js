@@ -56,7 +56,18 @@ const directMessageHandler = async (message) => {
   if (matchedId) genMessage = genMessage.replace(matchedId, "").trim();
   // Run the context before function and update the gen message with it
   if (contextFuncs?.before)
-    genMessage = await contextFuncs.before(adventurer, message, genMessage);
+    genMessage = await contextFuncs
+      .before(adventurer, message, genMessage)
+      .catch(() => null);
+
+  // Handle when the context function fails or when there is no reply
+  if (!genMessage)
+    genMessage = await generateSingleResponse(
+      `Write a message apologizing for being unable to ${
+        context?.condition || "reply"
+      }`,
+      adventurer.aiContext
+    );
 
   // Send the assistant's discord message
   const sendProms = [model.sendMessage(adventurer, genMessage)];

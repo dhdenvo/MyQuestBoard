@@ -54,12 +54,4 @@ const createQuest = async (adv, msg) => {
   await QUEST.createOne(quest);
 };
 
-module.exports = (adv, msg, genMsg) =>
-  createQuest(adv, msg)
-    .then(() => genMsg)
-    .catch(() =>
-      generateSingleResponse(
-        "Write a message apologizing for being unable to create the quest",
-        adv.aiContext
-      )
-    );
+module.exports = (adv, msg, genMsg) => createQuest(adv, msg).then(() => genMsg);

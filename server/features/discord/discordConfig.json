@@ -9,7 +9,7 @@
     },
     {
       "id": "PORTAL",
-      "condition": "the message says something involving creating a portal, url, or access",
+      "condition": "the message says something involving creating a portal or access",
       "response": "here is your portal",
       "beforeFunc": "createPortal"
     },
