@@ -19,4 +19,4 @@ COPY server .
 COPY --from=client-builder /client-app/build ./build
 
 EXPOSE 8080
-CMD npm run server
+CMD npm start
