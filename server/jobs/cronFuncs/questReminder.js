@@ -8,15 +8,12 @@ const {
 } = require("../../features/shared/helpers/aiHelper");
 const { COLLECTION_NAMES } = require("../cronConfig");
 
-const generateQuestEmoji = async (quest, emojis, ignores) => {
-  const fullDescription = `${quest.title} (${quest.description})`;
+const generateQuestEmoji = async (quest, emojis) => {
   // Generate an emoji to react to the message on
   let emojiMessage =
-    `Generate three unique Standard Unicode emoji that represent the following: ${fullDescription} ` +
-    "Separate them by new lines (\n) and do not include anything else in the message.";
-  // Make sure there are no duplicate emojis between calls
-  if (ignores)
-    emojiMessage += "\nDo not give the following emojis:" + ignores.join(", ");
+    `Generate ten unique Standard Unicode emoji in order of relevance that represents the following: ` +
+    `${quest.title} (${quest.description})
+    Separate them by new lines (\n) and do not include anything else in the message.`;
   let genEmojis = await generateSingleResponse(emojiMessage);
   // Extract the emojis from each line, removing all non emojis
   genEmojis = genEmojis
@@ -34,7 +31,7 @@ const generateQuestEmoji = async (quest, emojis, ignores) => {
     }
   }
   // In case the set didn't have any valid emojis
-  return generateQuestEmoji(quest, emojis, genEmojis);
+  return generateQuestEmoji(quest, emojis);
 };
 
 const sendReminder = async (quests, msgAlteration) => {
