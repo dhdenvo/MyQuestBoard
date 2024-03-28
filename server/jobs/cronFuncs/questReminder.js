@@ -151,14 +151,11 @@ module.exports = async (query = {}) => {
         },
       },
     },
+    { $group: { _id: "$adventurer._id", quests: { $push: "$$ROOT" } } },
   ]);
   if (!reminderQuests.length) return;
 
-  const groupedQuests = reminderQuests.reduce((g, quest) => {
-    (g[quest.adventurer.id] = g[quest.adventurer.id] || []).push(quest);
-    return g;
-  }, {});
   // Send reminders for every quest that needs reminding
-  for (quest of Object.values(groupedQuests))
-    await sendReminder(quest, msgAlteration);
+  for (const quests of reminderQuests)
+    await sendReminder(quests.quests, msgAlteration);
 };
