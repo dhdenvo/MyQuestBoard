@@ -23,7 +23,6 @@ const generateQuestEmoji = async (quest, emojis) => {
   // Loop through emojis until there is a valid one
   for (const genEmoji of genEmojis) {
     if (emojis.includes(genEmoji)) continue;
-    await new Promise((resolve) => setTimeout(resolve, 200));
     const isValid = await checkReaction(genEmoji);
     if (isValid) {
       emojis.push(genEmoji);

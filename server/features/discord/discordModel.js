@@ -65,7 +65,14 @@ const checkReaction = (emoji) =>
   testMessage.then((msg) =>
     msg
       .react(emoji)
-      .then(() => true)
+      .then(() =>
+        // Remove all reactions on the message
+        Promise.all(
+          msg.reactions.cache.map((reaction) =>
+            reaction.users.remove(msg.author.id)
+          )
+        ).then(() => true)
+      )
       .catch(() => false)
   );
 
