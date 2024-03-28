@@ -49,7 +49,7 @@ const sendReminder = async (quests, msgAlteration) => {
       .map(({ title, description }) => `${title} (about ${description})`)
       .join(", ")}. `;
   generationMessage +=
-    "Make the message approximately 2 sentences and include emojis in the message, but do not end the message with emojis.";
+    "Make the message approximately 2 sentences and include emojis in the message.";
   // Update the generation message configuration if a msg alteration is passed
   if (msgAlteration) generationMessage += " " + msgAlteration;
 
@@ -58,10 +58,9 @@ const sendReminder = async (quests, msgAlteration) => {
     adventurer.aiContext
   );
 
-  const linkMsg = quests
+  message += quests
     .map(({ _id }) => `[⠀](${process.env.GUILD_ADDRESS}/quest/${_id})`)
     .join("");
-  message += emojis.reverse().join("") + linkMsg;
 
   // Send discord message of quest to complete
   const sentMessage = await sendMessage(adventurer, message);

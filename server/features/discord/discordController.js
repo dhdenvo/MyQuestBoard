@@ -101,13 +101,14 @@ const reactionAddHandler = async (reaction, user) => {
   const messageQuery = searchStr(
     message,
     `${process.env.GUILD_ADDRESS}/quest/`,
+    // A mongo id is 24 characters long
     24
   );
   if (!messageQuery?.length) return;
-  // Reverse the message to grab the emojis from the back
-  const emojiOptions = [...message.slice(0, message.indexOf("[⠀]"))]
-    .reverse()
-    .slice(0, messageQuery.length);
+  // Grab the emojis from the message
+  const emojiOptions = reaction.message.reactions.cache.map(
+    ({ _emoji: { name } }) => name
+  );
   const questId = messageQuery[emojiOptions.indexOf(emoji)];
 
   // Complete the quest for the adventurer
