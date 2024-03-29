@@ -10,5 +10,9 @@
   "GLOBAL_CONNECTIONS": {
     "DISCORD": "discord",
     "OPENAI": "openAI"
+  },
+  "ENV_TYPES": {
+    "PROD": "production",
+    "DEV": "development"
   }
 }
