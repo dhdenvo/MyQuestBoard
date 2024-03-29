@@ -1,3 +1,4 @@
 {
-  "STORED_IMAGE_LOC": "savedImages"
+  "STORED_IMAGE_LOC": "savedImages",
+  "DEFAULT_IMAGE_FILE": "default.png"
 }
