@@ -69,6 +69,9 @@ const directMessageHandler = async (message) => {
       adventurer.aiContext
     );
 
+  // Add the adventurer's context emoji for when it uses a context
+  if (matchedId && adventurer.contextEmoji)
+    genMessage = `${adventurer.contextEmoji} ${genMessage}`;
   // Send the assistant's discord message
   const sendProms = [model.sendMessage(adventurer, genMessage)];
 

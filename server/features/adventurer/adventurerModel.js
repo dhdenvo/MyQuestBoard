@@ -21,6 +21,7 @@ const adventurerSchema = Schema(
     aiConversation: { type: [conversationSchema], default: [] },
     hasImage: { type: Boolean, default: false },
     isOnVacation: { type: Boolean, default: false },
+    contextEmoji: { type: String, default: ":white_check_mark:" },
     timeZone: {
       current: { type: String, default: "America/Toronto" },
       base: { type: String, default: "America/Toronto" },
