@@ -34,13 +34,18 @@ module.exports = async () => {
     allDocs[i].map(async (doc) => {
       const generationText = getGenerationText(collection, doc);
       // Generate an AI image from the generation text for a doc
-      const imageUrl = await generateAiImage(generationText);
+      const imageUrl = await generateAiImage(generationText).catch(() => false);
       // Save the image to the stored data
-      await saveUrl(imageUrl, [`${collection}s`, `${doc._id.toString()}.png`]);
+      if (imageUrl)
+        await saveUrl(imageUrl, [
+          `${collection}s`,
+          `${doc._id.toString()}.png`,
+        ]);
       // Update the doc so it doesnt create a new image
       await alternateModels[collectionKey].updateOne(
         { _id: doc._id },
-        { hasImage: true }
+        // If unable to create an image, set to null
+        { hasImage: imageUrl ? true : null }
       );
     })
   ).flat();
