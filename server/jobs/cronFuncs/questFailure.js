@@ -83,9 +83,11 @@ module.exports = async () => {
       },
     ])
   );
+  await Promise.all(adventurerProms);
+
   await questReminder({
     _id: { $in: failedQuests.map((_id) => _id) },
-    specialTime: SPECIAL_TIMES,
+    specialTime: SPECIAL_TIMES.FAILURE,
     msgAlteration:
       "These are all failed quests, ensure the message reminds the " +
       "user that they should try to avoid failing them in the future.",
