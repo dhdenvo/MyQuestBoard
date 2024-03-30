@@ -61,19 +61,25 @@ const directMessageHandler = async (message) => {
       .catch(() => null);
 
   // Handle when the context function fails or when there is no reply
-  if (!genMessage)
+  if (!genMessage) {
     genMessage = await generateSingleResponse(
       `Write a message apologizing for being unable to ${
         context?.condition || "reply"
       }`,
       adventurer.aiContext
     );
+    adventurer.contextEmoji = ":x:";
+  }
 
   // Add the adventurer's context emoji for when it uses a context
-  if (matchedId && adventurer.contextEmoji)
+  if (matchedId && !genMessage.embeds && adventurer.contextEmoji)
     genMessage = `${adventurer.contextEmoji} ${genMessage}`;
+  // If the context sets the gen message to a embed, send the embed instead
+  const sendFunc = genMessage.embeds
+    ? model.sendMessageEmbed
+    : model.sendMessage;
   // Send the assistant's discord message
-  const sendProms = [model.sendMessage(adventurer, genMessage)];
+  const sendProms = [sendFunc(adventurer, genMessage)];
 
   // Update the player's conversation transcript only if its a regular conversation
   if (!matchedId)
