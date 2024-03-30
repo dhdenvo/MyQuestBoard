@@ -42,6 +42,11 @@ const sendMessage = async (adventurer, message) => {
   return await discUser.send(message);
 };
 
+const sendMessageEmbed = async (adventurer, details) => {
+  const discUser = await getUser(adventurer);
+  return await discUser.send(details);
+};
+
 // Handle direct messages using a given function
 const handleDirectMessage = async (func) => {
   const client = await discordConnProm;
@@ -79,6 +84,7 @@ const checkReaction = (emoji) =>
 module.exports = {
   getStatus,
   sendMessage,
+  sendMessageEmbed,
   handleDirectMessage,
   handleReactionAdd,
   checkReaction,

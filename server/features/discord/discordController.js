@@ -72,8 +72,12 @@ const directMessageHandler = async (message) => {
   // Add the adventurer's context emoji for when it uses a context
   if (matchedId && adventurer.contextEmoji)
     genMessage = `${adventurer.contextEmoji} ${genMessage}`;
+  // If the context sets the gen message to a embed, send the embed instead
+  const sendFunc = genMessage.embeds
+    ? model.sendMessageEmbed
+    : model.sendMessage;
   // Send the assistant's discord message
-  const sendProms = [model.sendMessage(adventurer, genMessage)];
+  const sendProms = [sendFunc(adventurer, genMessage)];
 
   // Update the player's conversation transcript only if its a regular conversation
   if (!matchedId)
