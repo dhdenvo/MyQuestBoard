@@ -24,6 +24,12 @@
       "condition": "the message says anything related to creating a quest",
       "response": "your quest has been created",
       "beforeFunc": "createQuest"
+    },
+    {
+      "id": "ADVENTURER_CARD",
+      "condition": "the message asks for details of their adventurer info, card, or rank",
+      "response": "here is your adventurer card",
+      "beforeFunc": "getAdventurerCard"
     }
   ],
   "PORTAL_TIMEOUT": 600000,
