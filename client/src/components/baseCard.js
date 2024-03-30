@@ -13,9 +13,7 @@ export default function BaseCard({ doc, imageGetter, onClick, children }) {
       ) : (
         <Box
           component="img"
-          src={
-            doc?.hasImage ? imageGetter(doc) : imageGetter({ _id: "DEFAULT" })
-          }
+          src={imageGetter(doc)}
           sx={{
             width: "100%",
             minHeight: "224px",
