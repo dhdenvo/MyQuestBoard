@@ -55,22 +55,21 @@ module.exports = async () => {
     (quest) => !quest.adventurer.isOnVacation || quest.isAvailOnVacation
   );
 
+  const failedCompletions = failedQuests.map((quest) => ({
+    adventurer: quest.adventurer._id,
+    quest: quest._id,
+    rankPoints: -(quest.failurePoints ?? quest.rankPoints),
+    isFailure: true,
+  }));
+
   // Create a completion for every quest failed
-  await alternateModels.COMPLETION.createMany(
-    failedQuests.map((quest) => ({
-      adventurer: quest.adventurer._id,
-      quest: quest._id,
-      rankPoints: -quest.rankPoints,
-      isFailure: true,
-    }))
-  );
+  await alternateModels.COMPLETION.createMany(failedCompletions);
   // For every adventurer, reduce their rank points based on the rank points they failed
   const adventurerProms = Object.entries(
-    failedQuests.reduce(
+    failedCompletions.reduce(
       (obj, quest) => ({
         ...obj,
-        [quest.adventurer._id]:
-          (obj[quest.adventurer._id] || 0) + quest.rankPoints,
+        [quest.adventurer]: (obj[quest.adventurer] || 0) + quest.rankPoints,
       }),
       {}
     )
@@ -78,7 +77,7 @@ module.exports = async () => {
     alternateModels.ADVENTURER.updateOne({ _id: adventurerId }, [
       {
         $set: {
-          rankPoints: { $max: [0, { $sum: ["$rankPoints", -lostAmount] }] },
+          rankPoints: { $max: [0, { $sum: ["$rankPoints", lostAmount] }] },
         },
       },
     ])

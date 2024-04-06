@@ -14,6 +14,7 @@ const questSchema = Schema(
     description: { type: String, required: true },
     fullView: { type: [String], default: [] },
     rankPoints: { type: Number, default: 0 },
+    failurePoints: { type: Number, default: null },
     isSecret: { type: Boolean, default: false },
     frequency: {
       type: String,
