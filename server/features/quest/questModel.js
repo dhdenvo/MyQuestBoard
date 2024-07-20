@@ -37,7 +37,7 @@ const questSchema = Schema(
       },
     },
     reminderFrequency: {
-      type: [{ dayDiff: Number, time: String }],
+      type: [Schema({ dayDiff: Number, time: String }, { _id: false })],
       default: [],
     },
     leniency: { type: Number, default: 0 },
