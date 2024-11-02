@@ -4,18 +4,10 @@ const {
   generateSingleResponse,
 } = require("../../features/shared/helpers/aiHelper");
 
-const rankSystem = {
-  S: { promotion: 20000, demotion: 20000 },
-  A: { promotion: 15000, demotion: 15000 },
-  B: { promotion: 11000, demotion: 10900 },
-  C: { promotion: 8000, demotion: 7900 },
-  D: { promotion: 5000, demotion: 4800 },
-  E: { promotion: 2500, demotion: 2000 },
-  F: { promotion: 1000, demotion: 500 },
-  G: {},
-};
-
-const sendCongrats = async ({ name, newRank, rank, aiContext, discordId }) => {
+const sendCongrats = async (
+  { name, newRank, rank, aiContext, discordId },
+  rankSystem
+) => {
   // Determine if the adventurer has been promoted or demoted
   const newRankInd = Object.keys(rankSystem).indexOf(newRank);
   const oldRankInd = Object.keys(rankSystem).indexOf(rank);
@@ -36,6 +28,11 @@ const sendCongrats = async ({ name, newRank, rank, aiContext, discordId }) => {
 
 module.exports = async () => {
   const adventurers = await alternateModels.ADVENTURER.findMany({});
+  const ranks = await alternateModels.RANK.findMany({}).lean();
+  const rankSystem = Object.fromEntries(
+    ranks.map(({ rank, ...details }) => [rank, details])
+  );
+
   const rankUpdates = adventurers
     .map((adventurer) => {
       const { rank, rankPoints } = adventurer;
@@ -63,5 +60,7 @@ module.exports = async () => {
   await alternateModels.ADVENTURER.bulkWrite(updates);
 
   // Send discord messages to all adventurers that have ranked up
-  await Promise.all(rankUpdates.map(sendCongrats));
+  await Promise.all(
+    rankUpdates.map((update) => sendCongrats(update, rankSystem))
+  );
 };
