@@ -28,7 +28,11 @@ const sendCongrats = async (
 
 module.exports = async () => {
   const adventurers = await alternateModels.ADVENTURER.findMany({});
-  const rankSystem = await alternateModels.RANK.findMany({});
+  const ranks = await alternateModels.RANK.findMany({}).lean();
+  const rankSystem = Object.fromEntries(
+    ranks.map(({ rank, ...details }) => [rank, details])
+  );
+
   const rankUpdates = adventurers
     .map((adventurer) => {
       const { rank, rankPoints } = adventurer;
