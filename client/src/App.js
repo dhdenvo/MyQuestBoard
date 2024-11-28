@@ -25,6 +25,16 @@ const theme = createTheme({
       border: "#FFE09E",
     },
   },
+  breakpoints: {
+    values: {
+      // Mobile verticle
+      mobVer: 700,
+      // Mobile horizontal
+      mobHor: 1400,
+      // Desktop
+      desktop: 1920,
+    },
+  },
 });
 
 function App() {
@@ -37,10 +47,11 @@ function App() {
               <LibraryState>
                 <AppHeader>
                   <Grid container sx={{ p: "1%", minHeight: "91vh" }}>
-                    <Grid item xs={2} />
+                    <Grid item desktop={2} mobVer={0} mobHor={0} />
                     <Grid
                       item
-                      xs={8}
+                      desktop={8}
+                      mobVer={12}
                       sx={{
                         backgroundColor: "backing.main",
                         p: "1%",
@@ -49,7 +60,7 @@ function App() {
                     >
                       <PageRouter />
                     </Grid>
-                    <Grid item xs={2} />
+                    <Grid item desktop={2} mobVer={0} mobHor={0} />
                   </Grid>
                 </AppHeader>
               </LibraryState>
