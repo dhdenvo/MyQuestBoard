@@ -33,7 +33,7 @@ app.listen(process.env.PORT, (err) => {
   console.log("Server started on port", process.env.PORT);
 });
 
-app.use(express.static(join(__dirname, "/build")));
+app.use(express.static(join(__dirname, "/dist")));
 app.get("/*", (req, res) => {
-  res.sendFile(join(__dirname, "/build/index.html"));
+  res.sendFile(join(__dirname, "/dist/index.html"));
 });
