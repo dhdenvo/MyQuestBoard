@@ -13,6 +13,7 @@ ENV NODE_ENV=production
 
 WORKDIR /server-app
 COPY server/package.json .
+RUN npm cache clean --force
 RUN npm install
 COPY server .
 
